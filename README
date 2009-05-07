@@ -1,0 +1,26 @@
+A helper to dramatically speedup the time it takes to run 
+require 'rubygems'
+
+usage:
+instead of 
+require 'rubygems'
+it's now
+require 'fast_start_gems.rb'
+
+which acts about the same as gem_prelude does on 1.9 --it loads the paths of the newest gem versions into your load path so they're ready to be required.
+
+Example speed difference:
+
+$ time ruby require_rubygems.rb
+real    0m0.765s
+user    0m0.031s
+sys     0m0.015s
+
+$ time ruby require_fast_start.rb
+real    0m0.110s
+user    0m0.031s
+sys     0m0.015s
+
+Finally ruby script startup times that don't spend forever just reloading gem paths.
+
+TODO: compare with gem_prelude, too.
