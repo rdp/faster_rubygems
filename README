@@ -17,7 +17,7 @@ sys     0m0.015s
 
 Yea! Finally ruby script startup times that don't spend forever just reloading gem paths.
 
-It acts about the same as gem_prelude does on 1.9 -- loads the paths of the newest gem versions into your load path so they're ready to go.
+It acts about the same as gem_prelude does (prelude is 1.9 only currently) -- loads the paths of the newest gem versions into your load path so they're ready to go.
 
 == installation ==
 
