@@ -1,14 +1,20 @@
 require 'rbconfig'
 
 gem_paths = []
+suffix =  '/ruby/gems/' + RUBY_VERSION[0..2] + '/gems'
+gem_paths << Config::CONFIG['libdir'] + suffix
 
-gem_paths << Config::CONFIG['libdir'] + '/ruby/gems/' + RUBY_VERSION[0..2] + '/gems'
-gem_paths << ENV['GEM_PATH'].split(':') if ENV['GEM_PATH'] # TODO should this override or supplement?
+# handle ~/.gems
+gem_paths << File.expand_path('~') + suffix
 
+# handle ENV['GEM_PATH'] if it exists
+
+gem_paths << ENV['GEM_PATH'].split(':').select{|path| path + '/.gems'} if ENV['GEM_PATH'] # TODO should this override or supplement?
+
+# TODO
 # spec: should find highest version of files
 # spec: with multiple paths should find all files :P
 
-gem_paths << File.expand_path('~')
 all_gems = []
 
 for gem_path in gem_paths do
