@@ -1,2 +1,2 @@
 require 'rubygems'
-require 'ruby-wmi'
+require 'RedCloth'
