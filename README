@@ -51,7 +51,8 @@ real    0m0.026s
 So better, but not "such a big deal" as it is on windows boxes (where it can use up to 50% of the script time).  Also note that that's on warm start--cold start might show higher differences.  And it's still a 4x speedup :)
 Note also that a few non conforming gems require the use of require 'rubygems' no matter what (they're pretty rare, though--you probably won't run into them).
 
-TODO: compare with gem_prelude speeds, too.
+Note: you don't need this for ruby 1.9, which already preloads via gem_prelude (though I suppose you could replace gem_prelude with it--I'm not sure if it's much of a speedup doing that though).
+
 Author may be reached via github rogerdpack
 
 [1] http://rubyforge.org/tracker/index.php?func=detail&aid=21288&group_id=126&atid=578
