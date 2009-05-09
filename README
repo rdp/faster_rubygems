@@ -1,6 +1,6 @@
 A helper to dramatically speedup the time it takes to run 
 require 'rubygems'
-inspired by a request from Yehuda Katz [1]
+inspired by a request from Yehuda Katz [1] and gem_prelude
 
 Example speed difference:
 
