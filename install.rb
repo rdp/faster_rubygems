@@ -5,7 +5,7 @@ rescue LoadError
  require 'fileutils'
  File.class_eval {
   def File.copy *args
-    File.copy_stream *args
+    File.copy_stream(*args)
   end
  }
 end
