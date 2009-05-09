@@ -7,17 +7,13 @@ Example speed difference:
 bash-3.1$ time ruby examples/require_fast_start.rb
 
 real    0m0.500s
-user    0m0.031s
-sys     0m0.015s
 bash-3.1$ time ruby examples/require_rubygems.rb
 
 real    0m1.109s
-user    0m0.015s
-sys     0m0.015s
 
 Yea! Finally ruby script startup times that don't spend forever just reloading gem paths.
 
-It acts about the same as gem_prelude does (prelude is 1.9 only currently) -- loads the paths of the highest version of each gem into your load path so they're ready to be required.
+It acts about the same as gem_prelude does (prelude is 1.9 only currently) -- adds the paths of the highest version of each gem into your load path so they're ready to be required.
 
 == installation ==
 
@@ -28,8 +24,9 @@ ex from ubuntu:
 from doze:
 c:\ruby18\lib\ruby\site_ruby\1.8\rubygems.rb
 
+# copy some files into that same directory
+
 git clone git://github.com/rogerdpack/faster_rubygems.git
-# copy to rubygems.rb dir
 cp faster_rubygems/rubygems_*.rb /usr/local/lib/ruby/site_ruby/1.8
 
 == usage ==
@@ -38,25 +35,21 @@ require 'rubygems'
 it's 
 require 'rubygems_fast.rb'
 or
-require 'rubygems_f.rb'
+require 'rubygems_f.rb' # shortcut to the first method
 
-Though if you were really clever I suppose you could figure out how to override the default rubygem behavior to do this, instead :)
+Though if you were really clever I suppose you could figure out how to override the default rubygem behavior to do this, always :)
 
 
 Speed difference example on linux:
 $ time ruby examples/require_rubygems.rb
 
 real    0m0.086s
-user    0m0.077s
-sys     0m0.008s
 $ time ruby examples/require_fast_start.rb
 
 real    0m0.026s
-user    0m0.016s
-sys     0m0.008s
 
-So significant but not "such a big deal" as it is on windows boxes.  That's on warm start, however--slow start might show higher differences.  And it's still a 4x speedup :)
-Note also that a few non conforming gems require the use of require 'rubygems' no matter what (they're pretty rare, though).
+So better, but not "such a big deal" as it is on windows boxes (where it can use up to 50% of the script time).  Also note that that's on warm start--cold start might show higher differences.  And it's still a 4x speedup :)
+Note also that a few non conforming gems require the use of require 'rubygems' no matter what (they're pretty rare, though--you probably won't run into them).
 
 TODO: compare with gem_prelude speeds, too.
 Author may be reached via github rogerdpack
