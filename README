@@ -17,7 +17,7 @@ sys     0m0.015s
 
 Yea! Finally ruby script startup times that don't spend forever just reloading gem paths.
 
-It acts about the same as gem_prelude does (prelude is 1.9 only currently) -- loads the paths of the newest gem versions into your load path so they're ready to go.
+It acts about the same as gem_prelude does (prelude is 1.9 only currently) -- loads the paths of the highest version of each gem into your load path so they're ready to be required.
 
 == installation ==
 
@@ -37,14 +37,11 @@ instead of
 require 'rubygems'
 it's 
 require 'rubygems_fast.rb'
+or
+require 'rubygems_f.rb'
 
-though if you were really clever I suppose you could figure out how to override default rubygems to just do this :)
+Though if you were really clever I suppose you could figure out how to override the default rubygem behavior to do this, instead :)
 
-TODO: compare with gem_prelude speeds, too.
-
-[1] http://rubyforge.org/tracker/index.php?func=detail&aid=21288&group_id=126&atid=578
-
-Author may be reached via github rogerdpack
 
 Speed difference example on linux:
 $ time ruby examples/require_rubygems.rb
@@ -60,3 +57,9 @@ sys     0m0.008s
 
 So significant but not "such a big deal" as it is on windows boxes.  That's on warm start, however--slow start might show higher differences.  And it's still a 4x speedup :)
 Note also that a few non conforming gems require the use of require 'rubygems' no matter what (they're pretty rare, though).
+
+TODO: compare with gem_prelude speeds, too.
+Author may be reached via github rogerdpack
+
+[1] http://rubyforge.org/tracker/index.php?func=detail&aid=21288&group_id=126&atid=578
+
