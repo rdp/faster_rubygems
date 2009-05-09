@@ -1,2 +1,3 @@
 require 'rubygems'
-require 'RedCloth'
+require 'fastercsv'
+puts 'done'
