@@ -29,7 +29,7 @@ ex from ubuntu:
 
 git clone git://github.com/rogerdpack/faster_rubygems.git
 # copy to rubygems.rb dir
-cp faster_rubygems/rubygems_fast.rb /usr/local/lib/ruby/site_ruby/1.8
+cp faster_rubygems/rubygems_*.rb /usr/local/lib/ruby/site_ruby/1.8
 
 == usage ==
 instead of 
