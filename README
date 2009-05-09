@@ -25,7 +25,8 @@ How to install (manual for now--with any interest I could make it automatic):
 find your rubygems.rb file:
 ex from ubuntu:
 /usr/local/lib/ruby/site_ruby/1.8/rubygems.rb
-
+from doze:
+c:\ruby18\lib\ruby\site_ruby\1.8\rubygems.rb
 
 git clone git://github.com/rogerdpack/faster_rubygems.git
 # copy to rubygems.rb dir
