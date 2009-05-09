@@ -44,3 +44,18 @@ TODO: compare with gem_prelude speeds, too.
 [1] http://rubyforge.org/tracker/index.php?func=detail&aid=21288&group_id=126&atid=578
 
 Author may be reached via github rogerdpack
+
+Speed difference example on linux:
+$ time ruby examples/require_rubygems.rb
+
+real    0m0.086s
+user    0m0.077s
+sys     0m0.008s
+$ time ruby examples/require_fast_start.rb
+
+real    0m0.026s
+user    0m0.016s
+sys     0m0.008s
+
+So significant but not "such a big deal" as it is on windows boxes.  That's on warm start, however--slow start might show higher differences.  And it's still a 4x speedup :)
+Note also that a few non conforming gems require the use of require 'rubygems' no matter what (they're pretty rare, though).
