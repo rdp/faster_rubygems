@@ -53,7 +53,9 @@ Note also that a few non conforming gems require the use of require 'rubygems' n
 
 Note: you don't need this for ruby 1.9, which already preloads via gem_prelude (though I suppose you could replace gem_prelude with it--I'm not sure if it's much of a speedup doing that though).
 
+competition:
+http://github.com/fabien/minigems/tree/master
+
 Author may be reached via github rogerdpack
 
 [1] http://rubyforge.org/tracker/index.php?func=detail&aid=21288&group_id=126&atid=578
-
