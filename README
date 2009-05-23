@@ -1,48 +1,52 @@
 A helper to dramatically speedup the time it takes to run 
 require 'rubygems'
-inspired by a feature request from Yehuda Katz [1]
+inspired by a request from Yehuda Katz [1] and gem_prelude
 
 Example speed difference (windows box, lots of gem):
 
 bash-3.1$ time ruby examples/require_rubygems_normal.rb
 
 real    0m1.109s
-user    0m0.015s
-sys     0m0.015s
 bash-3.1$ time ruby examples/require_fast_start.rb
 
 real    0m0.500s
-user    0m0.031s
-sys     0m0.015s
+bash-3.1$ time ruby examples/require_rubygems.rb
 
 Yea! Finally ruby script startup times that don't spend forever just reloading gem paths.
 
-It acts about the same as gem_prelude does (prelude is 1.9 only currently) -- loads the paths of the newest gem versions into your load path so they're ready to go.
+It acts about the same as gem_prelude does (prelude is 1.9 only currently) -- adds the paths of the highest version of each gem into your load path so they're ready to be required.
 
 == installation ==
 
-How to install (manual for now--with any interest I could make it automatic):
-find your rubygems.rb file:
-ex from ubuntu:
-/usr/local/lib/ruby/site_ruby/1.8/rubygems.rb
-example on doze:
-C:\Ruby18\lib\ruby\site_ruby\1.8\rubygems.rb
-
-now copy rubygems_fast.rb to the same directory rubygems.rb is in.
-
-ex:
-git clone git://github.com/rogerdpack/faster_rubygems.git
-# copy to rubygems.rb dir
-cp faster_rubygems/rubygems_fast.rb /usr/local/lib/ruby/site_ruby/1.8
+ruby install.rb
 
 == usage ==
 instead of 
 require 'rubygems'
 it's 
+require 'rubygems_f.rb'
+or
 require 'rubygems_fast.rb'
+(both do the same thing, first is to save key strokes)
 
-though if you were really clever I suppose you could figure out how to override default rubygems to just do this :)
+If you were really clever I suppose you could figure out how to override the default rubygem behavior to do this, always :)
 
-TODO: compare with gem_prelude speeds, too.
+Speed difference example on linux:
+$ time ruby examples/require_rubygems.rb
+
+real    0m0.086s
+$ time ruby examples/require_fast_start.rb
+
+real    0m0.026s
+
+So overall better, but not "such a big deal" as it is on windows boxes (where it can use up to 50% of the script time).  Also note that that's on warm start--cold start might show higher differences.  And it's still a 4x speedup :)
+Note also that a few non conforming gems require the use of require 'rubygems' no matter what (they're pretty rare, though--you probably won't run into them).
+
+Note: you don't need this for ruby 1.9, which already preloads via gem_prelude (though I suppose you could replace gem_prelude with it--I'm not sure if it's much of a speedup doing that though).
+
+competition:
+http://github.com/fabien/minigems/tree/master
+
+Author may be reached via github rogerdpack
 
 [1] http://rubyforge.org/tracker/index.php?func=detail&aid=21288&group_id=126&atid=578

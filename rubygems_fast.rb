@@ -1,14 +1,12 @@
 require 'rbconfig'
 
 gem_paths = []
-suffix =  '/ruby/gems/' + RUBY_VERSION[0..2] + '/gems'
-gem_paths << Config::CONFIG['libdir'] + suffix
+gem_paths << Config::CONFIG['libdir'] + '/ruby/gems/' + RUBY_VERSION[0..2] + '/gems'
 
-# handle ~/.gems
-gem_paths << File.expand_path('~') + suffix
+# handle ~/.gem
+gem_paths << File.expand_path('~') + '/.gem/ruby/' + RUBY_VERSION[0..2] + '/gems'
 
 # handle ENV['GEM_PATH'] if it exists
-
 gem_paths << ENV['GEM_PATH'].split(':').select{|path| path + '/.gems'} if ENV['GEM_PATH'] # TODO should this override or supplement?
 
 # TODO
@@ -22,7 +20,6 @@ for gem_path in gem_paths do
   all_gems << Dir.glob(gem_path + '/*')
 
 end
-
 all_gems.flatten!.sort!.reverse!
 
 already_loaded_gems = {}
@@ -41,7 +38,17 @@ for gem in all_gems do
 
   if(!already_loaded_gems[name])
     already_loaded_gems[name] = true
-    $: << gem + '/lib'
+    if File.directory? gem + '/lib'
+        $: << gem + '/lib'
+    else
+      # unfortunately a few gems load from, say gem/something_not_lib/gemname.rb
+      for dir in Dir.glob(gem + '/*') do
+        if File.directory? dir
+	  $: << dir
+	  # if anybody wants anything lower than that, let me know
+        end
+      end
+    end
   end
     
 end
