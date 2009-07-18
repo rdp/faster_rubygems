@@ -18,6 +18,8 @@ It acts about the same as gem_prelude does (prelude is 1.9 only currently) -- ad
 
 == installation ==
 
+git clone git://github.com/rogerdpack/faster_rubygems.git
+cd faster_rubygems
 ruby install.rb
 
 == usage ==
