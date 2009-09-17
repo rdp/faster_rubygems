@@ -35,19 +35,18 @@ in your scripts.
 
 If you were really clever I suppose you could figure out how to override the default rubygem behavior to do this, always :)
 
-For those interested, speed difference example on linux:
-$ time ruby examples/require_rubygems.rb
-
-real    0m0.086s
+For those interested, speed difference example on linux (250 gems):
+$ time ruby examples/require_rubygems_normal.rb
+ruby examples/require_rubygems_normal.rb  0.57s user 0.05s system 85%
+cpu 0.726 total
 
 $ time ruby examples/require_fast_start.rb
+ruby examples/require_fast_start.rb  0.04s user 0.02s system 46% cpu
+0.121 total
 
-real    0m0.026s
-
-Also note that that's on warm start--cold start might show higher differences.  And it's still a 4x speedup :)
 Note also that a few non conforming gems require the use of require 'rubygems' no matter what (they're pretty rare, though--you probably won't run into them, and I'm not aware of any).
 
-Note: you don't need this for ruby 1.9, which already preloads via gem_prelude, but it won't hurt to use it in 1.9--it defaults to a no-op.
+Note: you don't need this for ruby 1.9, which already preloads via gem_prelude, but it won't hurt to use it in 1.9--it defaults to a no-op, so doesn't hurt.
 
 Related projects:
 
