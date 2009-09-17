@@ -1,20 +1,22 @@
-A helper to dramatically speedup the time it takes to run 
-require 'rubygems'
-inspired by a request from Yehuda Katz [1] and gem_prelude
+A helper to dramatically speedup the time it takes to load rubygems
 
-Example speed difference (windows box, lots of gem):
+require 'rubygems' no longer has to sap valuable time from your life
 
-bash-3.1$ time ruby examples/require_rubygems_normal.rb
+inspired by a request from Yehuda Katz [1] and 1.9's fast gem_prelude.
+
+Speed difference (windows box, lots of gem):
+
+$ time ruby examples/require_rubygems_normal.rb
 
 real    0m1.109s
-bash-3.1$ time ruby examples/require_fast_start.rb
+
+$ time ruby examples/require_fast_start.rb
 
 real    0m0.500s
-bash-3.1$ time ruby examples/require_rubygems.rb
 
 Yea! Finally ruby script startup times that don't spend forever just reloading gem paths.
 
-It acts about the same as gem_prelude does (prelude is 1.9 only currently) -- adds the paths of the highest version of each gem into your load path so they're ready to be required.
+It acts about the same as gem_prelude (prelude is 1.9 only currently) -- adds the paths of the highest version of each gem into your load path so they're ready to be required.
 
 == installation ==
 
@@ -26,24 +28,25 @@ ruby install.rb
 == usage ==
 instead of 
 require 'rubygems'
-it's 
-require 'rubygems_f.rb'
+it's either
+require 'frubygems.rb'
 or
 require 'rubygems_fast.rb'
 (both do the same thing, first is to save key strokes)
 
 If you were really clever I suppose you could figure out how to override the default rubygem behavior to do this, always :)
 
-Speed difference example on linux:
+For those interested, speed difference example on linux:
 $ time ruby examples/require_rubygems.rb
 
 real    0m0.086s
+
 $ time ruby examples/require_fast_start.rb
 
 real    0m0.026s
 
-So overall better, but not "such a big deal" as it is on windows boxes (where it can use up to 50% of the script time).  Also note that that's on warm start--cold start might show higher differences.  And it's still a 4x speedup :)
-Note also that a few non conforming gems require the use of require 'rubygems' no matter what (they're pretty rare, though--you probably won't run into them).
+Also note that that's on warm start--cold start might show higher differences.  And it's still a 4x speedup :)
+Note also that a few non conforming gems require the use of require 'rubygems' no matter what (they're pretty rare, though--you probably won't run into them, and I'm not aware of any).
 
 Note: you don't need this for ruby 1.9, which already preloads via gem_prelude (though I suppose you could replace gem_prelude with it--I'm not sure if it's much of a speedup doing that though).
 
