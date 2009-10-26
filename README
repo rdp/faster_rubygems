@@ -21,19 +21,18 @@ It acts about the same as gem_prelude (prelude is 1.9 only currently) -- adds th
 == installation ==
 
 git clone git://github.com/rogerdpack/faster_rubygems.git
-ruby faster_rubygems/install.rb # done!
+ruby faster_rubygems/install.rb # done
 
 == usage ==
-instead of 
-require 'rubygems'
-it's either
-require 'frubygems.rb'
+require 'frubygems'
 or
-require 'rubygems_fast.rb'
-(both do the same thing, first is to save key strokes)
-in your scripts.
+require 'rubygemsf'
+
+(both do the same thing).
 
 If you were really clever I suppose you could figure out how to override the default rubygem behavior to do this, always :)
+
+== Speed differences == 
 
 For those interested, speed difference example on linux (250 gems):
 $ time ruby examples/require_rubygems_normal.rb
