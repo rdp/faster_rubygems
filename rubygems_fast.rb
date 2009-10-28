@@ -16,7 +16,7 @@ if RUBY_VERSION < '1.9'
 
   all_gems = []
 
-  for gem_path in gem_paths do
+  for gem_path in gem_paths.flatten do
 
     all_gems << Dir.glob(gem_path + '/*')
 
