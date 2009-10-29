@@ -1,5 +1,6 @@
 begin
   require 'jeweler'
+  raise 'do it by hand'
   Jeweler::Tasks.new do |gemspec|
     gemspec.name = "faster_rubygems"
     gemspec.summary = "faster gem loading"
