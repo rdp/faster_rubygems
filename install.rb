@@ -1,9 +1,10 @@
 require 'fileutils'
 require 'rbconfig'
 
-dir = File.dirname(__FILE__)
-for file in ['rubygems_fast.rb', 'frubygems.rb'] do
-  FileUtils.cp dir + '/' + file, Config::CONFIG['sitelibdir'] + '/' + file
+Dir.chdir 'lib' do
+  for file in Dir['*.rb'] do
+    FileUtils.cp file, Config::CONFIG['sitelibdir'] + '/' + file
+  end
 end
 
 require 'frubygems' # test it out now :P
