@@ -1,1 +1,1 @@
-require 'rubygems_fast'
+require 'faster_rubygems'
