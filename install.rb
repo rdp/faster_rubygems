@@ -9,4 +9,4 @@ end
 
 require 'frubygems' # test it out now :P
 
-puts 'Installed--thank you for trying out -- require \'frubygems\''
+puts 'Installed--thank you for trying out -- require \'faster_rubygems\''
