@@ -17,8 +17,7 @@ describe FasterRubyGems do
     assert paths.length == 0
     FileUtils.mkdir_p @gem_path + '/abc-0.9.0/lib'
     paths = FasterRubyGems.gem_prelude_paths
-    assert paths.length == 1
-    
+    assert paths.length == 1    
   end
   
   it "should calculate 0.10.0 as greater than 0.9.0" do
@@ -27,7 +26,6 @@ describe FasterRubyGems do
     FileUtils.mkdir_p @gem_path + '/abc-0.10.0/lib'
     paths = FasterRubyGems.gem_prelude_paths
     assert( (paths.grep /abc-0.10.0/).length > 0)
-    
   end
   
   it "should find highest version of normal numbered gems" do
