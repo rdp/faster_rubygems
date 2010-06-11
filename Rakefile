@@ -8,8 +8,10 @@ require 'jeweler'
 
   s.post_install_message = "
 
-installed! use by doing require 'faster_rubygems'
+installed! use -> require 'faster_rubygems'
 
 "
 
+  s.add_development_dependency 'test-unit', '=1.2.3'
+  s.add_development_dependency 'test-unit', '=2.0.6'
  end

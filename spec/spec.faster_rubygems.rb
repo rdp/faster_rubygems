@@ -1,6 +1,6 @@
 require 'rubygems' if RUBY_VERSION[0..2] < '1.9'
 require 'sane'
-require_rel '../lib/faster_rubygems_lib'
+require_relative '../lib/faster_rubygems_lib'
 require 'spec/autorun'
 require 'fileutils'
     
@@ -10,6 +10,7 @@ describe FasterRubyGems do
     ENV['GEM_PATH'] = 'test_dir'
     @gem_path = 'test_dir/gems/' # boo
     FileUtils.rm_rf @gem_path
+    raise 'you dont need to test this on 1.9' if RUBY_VERSION > '1.9'
   end
   
   it "should calculate something" do
@@ -38,5 +39,17 @@ describe FasterRubyGems do
   it "with multiple paths should find all files"
   
   it "should respect file::separator"
+  
+  
+  def ruby lib
+    assert system(OS.ruby_bin + ' ' + lib)
+    assert system(OS.ruby_bin + ' ' + lib)
+  end
+  
+  it "should load full rubygems on gem xxx" do
+    ruby('files/test_gem.rb')
+    ruby('files/test_gem_const.rb')
+     ruby('files/test_gem_func.rb')
+  end
 
 end
