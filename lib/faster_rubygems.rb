@@ -1,9 +1,5 @@
 if RUBY_VERSION < '1.9'
   require File.dirname(__FILE__) + '/faster_rubygems_lib.rb'
-  all = FasterRubyGems.gem_prelude_paths
-  all.each{|path|
-    $: << path
-  }
   
   module Kernel
     

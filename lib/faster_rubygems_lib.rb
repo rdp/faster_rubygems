@@ -1,9 +1,6 @@
 class FasterRubyGems
-  def self.gem_prelude_paths
-    # note: the RUBY_VERSION[0..2] thing below fails for 1.9...
-    raise 'bad version' if RUBY_VERSION[0..2] > '1.8'
-    require 'rbconfig'
-
+  
+  def self.all_gem_roots
     gem_paths = []
     # add the default gem path
      
@@ -16,14 +13,20 @@ class FasterRubyGems
     if ENV['GEM_PATH']
       gem_paths = ENV['GEM_PATH'].split(File::PATH_SEPARATOR).collect{|path| path + '/gems'} 
     end
-
+    # ... should probably have more here ...
+    gem_paths.flatten
+  end
+  
+  def self.gem_prelude_paths
+    raise 'only 1.8 wants this' if RUBY_VERSION[0..2] > '1.8'
+    require 'rbconfig'    
+  
     all_gems = []
-
-    for gem_path in gem_paths.flatten do
+    for gem_path in all_gem_roots do
       all_gems << Dir.glob(gem_path + '/*')
     end
     all_gems.flatten!
-    all_gems = all_gems.sort_by{|gem| gem.split('-')[-1].split('.').map{|n| n.to_i}} # 0.10.0 > 0.9.0 so straight sort won't work for us
+    all_gems = all_gems.sort_by{|gem| gem.split('-')[-1].split('.').map{|n| n.to_i}} # 0.10.0 > 0.9.0 so sort it thus
     all_gems.reverse!
 
     already_loaded_gems = {}
@@ -61,4 +64,3 @@ class FasterRubyGems
     prelude_paths
   end
 end
-
