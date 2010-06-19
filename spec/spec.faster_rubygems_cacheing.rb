@@ -36,11 +36,14 @@ describe FasterRubyGems do
   
   context "respecting gem xxx, yyy commands" do
 
-    # typical binary script:
-    # gem 'after', ">= 0"
+    it "should do nothing if you pass it a default version, which is *oh so right*" do
+      # typical binary script:
+      # gem 'after', ">= 0"
     
-    it "should do nothing if you pass it a nil version, which is *oh so right*" do
-      gem 'after', ">= 0" # should basically be a no op
+      length = $:.length
+      gem 'after', ">= 0"
+      # should have been a no op
+      assert $:.length == length
       assert !defined?(Gem::Dependency)
     end
     
@@ -61,9 +64,7 @@ describe FasterRubyGems do
     it "should do what 1.9 does not do and fail if you implicitly activate, then really activate" 
   end
   
-  it "should clear the cache on Gem change" do
-    fail
-  end
+  it "should clear the cache on Gem change"
   
   it "should use a different cache based on different gem config and ruby version"
   
