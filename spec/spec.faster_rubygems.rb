@@ -1,16 +1,10 @@
-require 'rubygems' if RUBY_VERSION[0..2] < '1.9'
-require 'sane'
-require_relative '../lib/faster_rubygems_lib'
-require 'spec/autorun'
-require 'fileutils'
-    
+require File.dirname(__FILE__) + '/common.rb'
+
 describe FasterRubyGems do
 
   before do
-    ENV['GEM_PATH'] = 'test_dir'
-    @gem_path = 'test_dir/gems/' # boo
-    FileUtils.rm_rf @gem_path
-    raise 'you dont need to test this on 1.9' if RUBY_VERSION > '1.9'
+    setup
+    raise 'you dont need to test this file on 1.9' if RUBY_VERSION > '1.9'
   end
   
   it "should calculate something" do
