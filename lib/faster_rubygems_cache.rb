@@ -2,9 +2,21 @@ if RUBY_VERSION < '1.9.0'
   
   module Kernel
     
-    def gem *args
-      undef :gem
+    def gem(gem_name, *version_requirements)
+      if(version_requirements == [">= 0"])
+         # basically a no-op because it's already on the load path
+         if $:.detect{|p| p =~ Regexp.new('gems/' + gem_name)}
+            return
+         else
+           $stderr.puts 'faster_rubygems_gem gem not found' + gem_name
+         end
+      else
+        $stderr.puts 'faster_rubygems_gem gem command has requirements--please remove for faster_rubygems to work at its speediest ' + caller.join("\n")
+      end
+
+      undef :gem # necessary?
       require 'rubygems' # punt!
+      Gem::Dependency # punt 1.9!      
       gem *args
     end
   end

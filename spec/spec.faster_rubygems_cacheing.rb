@@ -26,7 +26,7 @@ describe FasterRubyGems do
       $:.unshift new_path
       Gem.bin_path('after', 'after', ">= 0").should == new_path + '/after'
       # should not have loaded full gems...
-      # if this fails then run it using ruby xxx not rspec xxx
+      # if this line fails then make sure you are running the spec file like ruby xxx not spec xxx
       assert !defined?(Gem::Dependency)
     end
     
@@ -35,21 +35,24 @@ describe FasterRubyGems do
   end
   
   context "respecting gem xxx, yyy commands" do
-    
-    it "should load a cached path to $:" do
-      fail
-    end
-    
-    
-    it "should load several cached paths to $:" do
-      fail
-    end
-    
-    it "should load full rubygems to get the original values to cache" do
-      fail
-    end
 
+    # typical binary script:
+    # gem 'after', ">= 0"
+    
+    it "should do nothing if you pass it a nil version, which is *oh so right*" do
+      gem 'after', ">= 0" # should basically be a no op
+      assert !defined?(Gem::Dependency)
+    end
+    
+    it "should react if you use --disable-gems in 1.9"
+    
     # rest are lower prio
+
+    it "should load a cached path to $:"
+    
+    it "should load several cached paths to $:"
+    
+    it "should load full rubygems to get the original values to cache"
     
     it "should actually activate each previous when it is forced to load full rubygems later"
   
