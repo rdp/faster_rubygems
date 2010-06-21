@@ -12,8 +12,6 @@ describe Gem do
   context "speeding Gem.bin_path the fake sick way" do
 
     it "should fake guess the right path instead of loading full rubygems for now" do
-      require 'ruby-debug'
-      debugger
       assert Gem.bin_path('after', 'after', ">= 0") =~ /after.*bin.*after/
       # should not have loaded full gems...
       # if this line fails then make sure you are running the spec file like ruby xxx not spec xxx
