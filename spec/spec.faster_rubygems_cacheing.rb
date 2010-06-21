@@ -1,12 +1,16 @@
-# this is going to be hard to test in 1.8.x...
-# maybe use faster_rubygems itself, to load the tests?
-
-require File.dirname(__FILE__) + '/common.rb'
+# to test in 1.8.x, make sure to use ruby specname.rb
+require File.dirname(__FILE__) + "/../lib/faster_rubygems"
+require 'sane'
+require 'spec/autorun'
+require 'fileutils'
 
 describe Gem do
 
   before do
-    setup    
+    ENV['GEM_PATH'] = 'test_dir'
+    @gem_path = 'test_dir/gems/' # wow.
+    FileUtils.rm_rf @gem_path
+    FileUtils.mkdir_p @gem_path
   end
 
   context "speeding Gem.bin_path the fake sick way" do
@@ -17,12 +21,11 @@ describe Gem do
       # if this line fails then make sure you are running the spec file like ruby xxx not spec xxx
       assert !defined?(Gem::Dependency)
     end
-    
+
   end
-  
+
   context "gem xxx" do
     it "should allow you to load 'older' gem versions somehow, like maybe cacheing" # lower prio
-  end    
+  end
 
-  
 end

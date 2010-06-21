@@ -1,4 +1,6 @@
-# copied verbatim from 1.9.1
+# copied from 1.9.2
+
+# in reality, this file will only be ever run via 1.8
 
 # depends on: array.rb dir.rb env.rb file.rb hash.rb module.rb regexp.rb
 # vim: filetype=ruby
@@ -7,9 +9,9 @@
 # * Encoding.default_external does not reflects -E.
 # * Should not expect Encoding.default_internal.
 # * Locale encoding is available.
-
 if defined?(Gem) then
 
+  require 'rbconfig'
   # :stopdoc:
 
   module Kernel
@@ -30,7 +32,7 @@ if defined?(Gem) then
       :libdir            => RbConfig::CONFIG["libdir"],
       :ruby_install_name => RbConfig::CONFIG["ruby_install_name"],
       :ruby_version      => RbConfig::CONFIG["ruby_version"],
-      :rubylibprefix     => RbConfig::CONFIG["rubylibprefix"],
+      :rubylibprefix     => (RbConfig::CONFIG["rubylibprefix"] ||  RbConfig::CONFIG['rubylibdir'].split('/')[0..-2].join('/')),
       :sitedir           => RbConfig::CONFIG["sitedir"],
       :sitelibdir        => RbConfig::CONFIG["sitelibdir"],
     }
@@ -68,7 +70,7 @@ if defined?(Gem) then
     end
 
     def self.set_home(home)
-      home = home.dup.force_encoding(Encoding.find('filesystem'))
+      home = home.dup
       home.gsub!(File::ALT_SEPARATOR, File::SEPARATOR) if File::ALT_SEPARATOR
       @gem_home = home
     end
@@ -90,11 +92,10 @@ if defined?(Gem) then
       end
 
       @gem_path.uniq!
-      @gem_path.map!{|x|x.force_encoding(Encoding.find('filesystem'))}
     end
 
     def self.user_home
-      @user_home ||= File.expand_path("~").force_encoding(Encoding.find('filesystem'))
+      @user_home ||= File.expand_path("~")
     rescue
       if File::ALT_SEPARATOR then
         "C:/"
@@ -105,7 +106,7 @@ if defined?(Gem) then
 
     # begin rubygems/defaults
     # NOTE: this require will be replaced with in-place eval before compilation.
-    require 'lib/rubygems/defaults.rb'
+    require File.dirname(__FILE__) + '/my_defaults.rb'
     # end rubygems/defaults
 
 
@@ -139,6 +140,9 @@ if defined?(Gem) then
       @loaded_full_rubygems_library = false
 
       def self.load_full_rubygems_library
+        if $DEBUG || $VERBOSE
+          $stderr.puts 'warning, loading full rubygems'
+        end
         return if @loaded_full_rubygems_library
 
         @loaded_full_rubygems_library = true
@@ -154,7 +158,7 @@ if defined?(Gem) then
         end
 
         $".delete path_to_full_rubygems_library
-        if $".any? {|path| path.end_with?('/rubygems.rb')}
+        if $".any? {|path| path =~ Regexp.new('/rubygems.rb$')}
           raise LoadError, "another rubygems is already loaded from #{path}"
         end
         require 'rubygems'
@@ -165,8 +169,14 @@ if defined?(Gem) then
         $" << path unless $".include?(path)
       end
 
+      Thread.new(Thread.current) do |t|
+        loop {t.raise unless Gem::ConfigMap[:rubylibprefix]}
+      end
+      
       def self.path_to_full_rubygems_library
-        installed_path = File.join(Gem::ConfigMap[:rubylibprefix], Gem::ConfigMap[:ruby_version])
+        # null rubylibprefix may mean 'you have loaded the other rubygems now!
+        prefix = (RbConfig::CONFIG["rubylibprefix"] ||  RbConfig::CONFIG['rubylibdir'].split('/')[0..-2].join('/'))
+        installed_path = File.join(prefix, Gem::ConfigMap[:ruby_version])
         if $:.include?(installed_path)
           return File.join(installed_path, 'rubygems.rb')
         else # e.g., on test-all
@@ -265,7 +275,7 @@ if defined?(Gem) then
           require_paths.first.instance_variable_set(:@gem_prelude_index, true)
         end
         # gem directories must come after -I and ENV['RUBYLIB']
-        $:[$:.index{|e|e.instance_variable_defined?(:@gem_prelude_index)}||-1,0] = require_paths
+        $:[$:.find{|e|e.instance_variable_defined?(:@gem_prelude_index)}||-1,0] = require_paths
       end
 
       def const_missing(constant)
