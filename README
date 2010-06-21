@@ -33,16 +33,22 @@ $ export RUBYOPTS=-rfaster_rubygems
 require 'faster_rubygems' 
 at the top of your script, or install it to be used by default thus:
 
+>> require 'rubygems'
 >> require 'faster_rubygems/install'
 >> FasterRubyGems.install_over_rubygems! # installs this to be the default for rubygems
 
 
 # later, to revert back to normal, should you so desire:
+>> require 'rubygems'
+>> require 'faster_rubygems/install'
 >> FasterRubyGems.uninstall_over_rubygems!
 
-== Speed differences == 
+If all else fails, you can reinstall rubygems by running setup.rb from within its package: http://rubyforge.org/frs/?group_id=126
+
+== More Speed Comparisons == 
 
 For those interested, speed difference example on linux (250 gems):
+
 $ time ruby examples/require_rubygems_normal.rb
 ruby examples/require_rubygems_normal.rb  0.57s user 0.05s system 85% cpu 0.726 total
 
@@ -57,4 +63,5 @@ http://github.com/fabien/minigems/tree/master
 1.9's gem_prelude.rb
 http://www.ruby-forum.com/topic/191673
 
-www.github.com/rdp/faster_rubygems
+Source/contact:
+http://www.github.com/rdp/faster_rubygems

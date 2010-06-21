@@ -163,8 +163,9 @@ if defined?(Gem) then
         end
         require 'rubygems'
         begin
-          require 'rubygems.bak' # just in case
+          require 'rubygems.rb.bak' # just in case
         rescue LoadError
+          # ok
         end
       end
 
