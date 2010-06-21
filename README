@@ -21,11 +21,24 @@ somewhere.
 
 == installation ==
 
-git clone git://github.com/rdp/faster_rubygems.git
-ruby faster_rubygems/install.rb # done
+$ gem install faster_rubygems
 
 == usage ==
-require 'faster_rubygems'
+
+1.9:
+$ export RUBYOPTS=-rfaster_rubygems
+
+1.8:
+
+require 'faster_rubygems' 
+at the top of your script, or install it to be used by default thus:
+
+>> require 'faster_rubygems/install'
+>> FasterRubyGems.install_over_rubygems! # installs this to be the default for rubygems
+
+
+# later, to revert back to normal, should you so desire:
+>> FasterRubyGems.uninstall_over_rubygems!
 
 == Speed differences == 
 

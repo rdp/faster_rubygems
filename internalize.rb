@@ -7,6 +7,4 @@ Dir.chdir File.dirname(__FILE__) + '/lib' do
   end
 end
 
-require 'frubygems' # test it out now, to make sure it worked (doesn't seem to hurt anything...)
-
 puts 'Installed--thank you for trying out -- require \'faster_rubygems\''
