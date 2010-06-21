@@ -9,16 +9,6 @@ describe FasterRubyGems do
     setup    
   end
 
-  it "should default to $HOME" do
-    Gem::FasterCache.cache_dir.should == File.expand_path('~/.faster_rubygems') + '/'
-  end
-
-  it "should have a changeable cache dir" do
-    Gem::FasterCache.cache_dir = 'temp_cache_dir'
-    Gem::FasterCache.cache_dir = 'temp_cache_dir' # run it twice so it will sniff out re-creation bugs
-    Gem::FasterCache.cache_dir.should == 'temp_cache_dir/'
-  end
-  
   context "speeding Gem.bin_path the fake sick way" do
 
     it "should fake guess the right path instead of loading full rubygems for now" do
@@ -45,6 +35,10 @@ describe FasterRubyGems do
       # should have been a no op
       assert $:.length == length
       assert !defined?(Gem::Dependency)
+    end
+    
+    it "should do nothing if you pass a version that is 'the one version already on the load path'" do
+      fail
     end
     
     it "should react if you use --disable-gems in 1.9"

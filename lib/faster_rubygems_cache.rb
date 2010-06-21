@@ -14,21 +14,33 @@ if RUBY_VERSION < '1.9.0'
         $stderr.puts 'faster_rubygems_gem gem command has requirements--please remove for faster_rubygems to work at its speediest ' + caller.join("\n")
       end
 
-      undef :gem # necessary?
-      require 'rubygems' # punt!
-      Gem::Dependency # punt 1.9!      
-      gem *args
+      undef :gem # avoid a warning
+      Gem.reload_full_rubygems!
+      gem gem_name, *version_requirements
     end
   end
   
   module Gem
+    
+    # method to go ahead and load full rubygems
+    def self.reload_full_rubygems!
+      require 'rubygems'
+      begin
+        require 'rubygems_overridden'
+      rescue LoadError
+        # ignore
+      end
+      # reload in 1.9
+      Gem::Dependency
+    end
+      
     def self.const_missing const
-      require 'rubygems' # punt!
+      reload_full_rubygems!
       return Gem.const_get(const)
     end
   
     def self.method_missing meth, *args
-     require 'rubygems' # punt!
+     reload_full_rubygems!
      return Gem.send(meth, *args)
     end
   end
@@ -37,21 +49,6 @@ end
 
 module Gem
 
-  module FasterCache
-    def self.cache_dir=new_cache
-      @cache_dir = new_cache + '/'
-      Dir.mkdir new_cache unless File.directory?(new_cache)
-    end
-    
-    # set it to its default
-    self.cache_dir=File.expand_path('~/.faster_rubygems')
-    
-    def self.cache_dir
-      @cache_dir
-    end
-  end
-  
-  
   def self.bin_path(name, exec_name = null, *version_args)
     # version_args are very very very typically [">= 0"]
     path = $:.detect{|n| n =~ Regexp.new("gems/" + name + "-.*bin")}
