@@ -13,4 +13,6 @@ installed! use -> require 'faster_rubygems'
 "
   s.add_development_dependency 'test-unit', '=1.2.3'
   s.add_development_dependency 'test-unit', '=2.0.6'
- end
+  s.add_development_dependency 'after', '=0.7.0'
+
+end

@@ -1,14 +1,8 @@
-if RUBY_VERSION < '1.9'
-  require File.dirname(__FILE__) + '/faster_rubygems_lib.rb'
-  all = FasterRubyGems.gem_prelude_paths
-  
-  all.each{|path|
-    $: << path
-  }  
-  
-else
- # not needed in 1.9, which by default loads gem_prelude
+if RUBY_VERSION < '1.9.0'
+  raise 'rubygems was already loaded' if defined?(Gem) 
+  module Gem; end # define it so gem_prelude will run...
+  require File.dirname(__FILE__) + "/my_gem_prelude.rb"  
 end
 
-# both need this one, though...or should at least
-require File.dirname(__FILE__) + '/faster_rubygems_cache'
+# both 1.8 and 1.9 now want this one...
+require File.dirname(__FILE__) + "/prelude_bin_path"  

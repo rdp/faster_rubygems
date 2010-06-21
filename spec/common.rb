@@ -1,7 +1,6 @@
 require 'rubygems' if RUBY_VERSION < '1.9.0'
 require 'sane'
-require_relative '../lib/faster_rubygems_lib'
-require_relative '../lib/faster_rubygems_cache'
+require_relative '../lib/faster_rubygems'
 require 'spec/autorun'
 require 'fileutils'
 
