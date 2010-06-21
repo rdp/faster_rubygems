@@ -127,7 +127,9 @@ if defined?(Gem) then
 
       if defined?(RUBY_ENGINE) then
         begin
-          require "rubygems/defaults/#{RUBY_ENGINE}"
+          # jruby is not ready for this... 
+          # it anticipates altering a full Gem version, currently, in 1.8 mode...
+          # require "rubygems/defaults/#{RUBY_ENGINE}"
         rescue ::LoadError
         end
       end
