@@ -27,24 +27,33 @@ describe FasterRubyGems do
   context "respecting gem xxx, yyy commands" do
 
     it "should do nothing if you pass it a default version, which is *oh so right*" do
-      # typical binary script:
+      # typical binary script is like:
       # gem 'after', ">= 0"
+      assert_does_not_load_gems do
+        gem 'after', ">= 0"
+      end
+    end
     
+    def assert_does_not_load_gems
       length = $:.length
-      gem 'after', ">= 0"
+      raise 'rubygems is already previously loaded!' if defined?(Gem::Dependency)
+      yield
       # should have been a no op
-      assert $:.length == length
+      $:.length.should == length
       assert !defined?(Gem::Dependency)
     end
     
     it "should do nothing if you pass a version that is 'the one version already on the load path'" do
-      fail
+      $:.unshift 'gems/after-9.9.9'
+      assert_does_not_load_gems do
+        gem 'after', "= 9.9.9"
+      end
     end
-    
-    it "should react if you use --disable-gems in 1.9"
     
     # rest are lower prio
 
+    it "should react appropo if you use --disable-gems in 1.9 (go to 1.8 mode uh guess)"
+    
     it "should load a cached path to $:"
     
     it "should load several cached paths to $:"
