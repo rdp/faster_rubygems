@@ -162,6 +162,10 @@ if defined?(Gem) then
           raise LoadError, "another rubygems is already loaded from #{path}"
         end
         require 'rubygems'
+        begin
+          require 'rubygems.bak' # just in case
+        rescue LoadError
+        end
       end
 
       def self.fake_rubygems_as_loaded
@@ -169,12 +173,8 @@ if defined?(Gem) then
         $" << path unless $".include?(path)
       end
 
-      Thread.new(Thread.current) do |t|
-        loop {t.raise unless Gem::ConfigMap[:rubylibprefix]}
-      end
-      
       def self.path_to_full_rubygems_library
-        # null rubylibprefix may mean 'you have loaded the other rubygems now!
+        # null rubylibprefix may mean 'you have loaded the other rubygems already somehow...' hmm
         prefix = (RbConfig::CONFIG["rubylibprefix"] ||  RbConfig::CONFIG['rubylibdir'].split('/')[0..-2].join('/'))
         installed_path = File.join(prefix, Gem::ConfigMap[:ruby_version])
         if $:.include?(installed_path)
