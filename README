@@ -32,8 +32,6 @@ Or
 1.9:
   $ export RUBYOPTS=-rfaster_rubygems
 
-  (You may need to temporarily disable this when installing gems later, currently).
-  
 1.8:
   you can install it to be used by default thus:
 
