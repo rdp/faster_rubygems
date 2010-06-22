@@ -1,14 +1,19 @@
 require 'jeweler'
   Jeweler::Tasks.new do |s|
-  s.name = %q{faster_rubygems}
-
+    s.name = %q{faster_rubygems}
 
   s.summary = %q{faster gem loading}
   s.extensions = ["ext/mkrf_conf.rb"]
 
   s.post_install_message = "
 
-installed! use -> require 'faster_rubygems'
+installed! 1.9 use -> require 'faster_rubygems' 
+
+1.8: use require 'faster_rubygems' or install as the default thus:
+
+>> require 'rubygems'
+>> require 'faster_rubygems/install'
+>> FasterRubyGems.install_over_rubygems! 
 
 "
   s.add_development_dependency 'test-unit', '=1.2.3'
