@@ -25,27 +25,26 @@ $ gem install faster_rubygems
 
 == usage ==
 
+require 'faster_rubygems' at the top of your script.
+
+Or
+
 1.9:
-$ export RUBYOPTS=-rfaster_rubygems
+  $ export RUBYOPTS=-rfaster_rubygems
 
 1.8:
+  you can install it to be used by default thus:
 
-require 'faster_rubygems' 
-at the top of your script, or install it to be used by default thus:
+  >> require 'rubygems'
+  >> require 'faster_rubygems/install' # installs faster_rubygems to be use in place of normal rubygems when you do a "require 'rubygems'"
 
->> require 'rubygems'
->> require 'faster_rubygems/install'
->> FasterRubyGems.install_over_rubygems! # installs this to be the default for rubygems
+  # later, to revert back to normal, should you so desire:
+  >> require 'rubygems'
+  >> require 'faster_rubygems/uninstall'
 
+  If all else fails in this process (it typically works fine), you can reinstall normal rubygems by running setup.rb from within its package.
 
-# later, to revert back to normal, should you so desire:
->> require 'rubygems'
->> require 'faster_rubygems/install'
->> FasterRubyGems.uninstall_over_rubygems!
-
-If all else fails, you can reinstall rubygems by running setup.rb from within its package: http://rubyforge.org/frs/?group_id=126
-
-== More Speed Comparisons == 
+== More Speed Comparisons ==
 
 For those interested, speed difference example on linux (250 gems):
 

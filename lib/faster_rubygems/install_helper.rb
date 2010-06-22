@@ -10,7 +10,7 @@
       File.open(old, 'w') do |f|
         f.write "require 'faster_rubygems'"
       end
-      'success--it will load by default in place of normal rubygems'
+      puts 'success--it will load by default in place of normal rubygems'
     end
     
     def self.rubygems_path
@@ -26,6 +26,6 @@
       old = rubygems_path + ".bak.rb"
       FileUtils.cp old, rubygems_path
       File.delete old
-      'success!'
+      puts 'successfully reverted back to normal rubygems'
     end
   end
