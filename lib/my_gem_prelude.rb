@@ -160,6 +160,7 @@ if defined?(Gem) then
         end
 
         $".delete path_to_full_rubygems_library
+        path = nil
         if $".any? {|path| path =~ Regexp.new('/rubygems.rb$')}
           raise LoadError, "another rubygems is already loaded from #{path}"
         end

@@ -32,6 +32,8 @@ Or
 1.9:
   $ export RUBYOPTS=-rfaster_rubygems
 
+  (You may need to temporarily disable this when installing gems later, currently).
+  
 1.8:
   you can install it to be used by default thus:
 
@@ -56,7 +58,15 @@ ruby examples/require_fast_start.rb  0.04s user 0.02s system 46% cpu 0.121 total
 
 Note also that a few non conforming gems require the use of require 'rubygems' no matter what (they're pretty rare, though--you probably won't run into them, and I'm not aware of any).
 
-Related projects:
+
+== Experimental ==
+
+If you want to be more aggressive you can try loading it with its cousin, faster_require:
+  
+1.9:  $ export RUBYOPTS=-rfaster_rubygems_with_faster_require_too
+1.8:  >> require 'faster_rubygems/install_with_faster_require_too' # installs faster_rubygems, as above, but also loads faster_require along with it.
+
+== Related projects ==
 
 http://github.com/fabien/minigems/tree/master
 1.9's gem_prelude.rb

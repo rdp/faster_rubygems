@@ -1,8 +1,13 @@
 # to test in 1.8.x, make sure to use ruby specname.rb
 require File.dirname(__FILE__) + "/../lib/faster_rubygems"
 require 'sane'
-require 'spec/autorun'
-require 'fileutils'
+require 'rspec'
+begin
+  require 'spec/autorun'
+rescue LoadError
+  # ok
+end
+  require 'fileutils'
 
 describe Gem do
 
