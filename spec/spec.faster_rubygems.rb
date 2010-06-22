@@ -27,5 +27,10 @@ describe Gem do
   context "gem xxx" do
     it "should allow you to load 'older' gem versions somehow, like maybe cacheing" # lower prio
   end
+  
+  it "in 1.9 if you pass it --disable-gems, it should load its full gem_prelude right there...I guess...though that's not going to fix any bottlenecks though..."
 
+  it "should make a directory cacheing list (yes!) in the root of each gem and load that, and use that to activate. Oh baby. Maybe, though that might fall
+  more under the faster_require aspect of it...hmm...maybe it's fast enough for now, except rails, which needs faster_require no matter what anyway..."
+  
 end
