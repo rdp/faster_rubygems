@@ -1,7 +1,7 @@
 # to test in 1.8.x, make sure to use ruby specname.rb
 require File.dirname(__FILE__) + "/../lib/faster_rubygems"
 require 'sane'
-require 'rspec'
+require 'rspec' # rspec 2
 begin
   require 'spec/autorun'
 rescue LoadError
