@@ -1,7 +1,7 @@
 # :stopdoc:
 
 if RUBY_VERSION < '1.9.0'
-  raise 'rubygems was already loaded?' if defined?(Gem) && !defined(Gem::FasterRubygems)
+  raise 'rubygems was already loaded?' if defined?(Gem) && !defined?(Gem::FasterRubygems)
   
   # define it so gem_prelude will execute...
   module Gem; 
