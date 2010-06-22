@@ -7,15 +7,17 @@ require 'fileutils'
 describe 'can create cache file apropo' do
   before do
     FileUtils.rm_rf Dir['test_dir/gems/*']
+    FileUtils.rm_rf Dir['test_dir/.faster*']
   end
   
+  private
   def create name, version = '0.0.0'
     new_name ='test_dir/gems/' + name  + "-" + version
     FileUtils.mkdir_p new_name + '/lib'
     File.write new_name + '/lib/a_file.rb', 'cool rubyness'
   end
   
-  it 'should be able to create a file' do
+  it 'should be able to create a cache file' do
     create 'gem1'
     Gem.create_cache ['test_dir']
     assert File.exist?('test_dir/.faster_rubygems_cache')
@@ -40,6 +42,14 @@ describe 'can create cache file apropo' do
     size2 = File.size('test_dir/.faster_rubygems_cache')
     assert size2 == size
   end  
+  
+  it "should create the caches on install/uninstall"
+  
+  it "should be ok if you aren't writable"
+  
+  it "should not load full rubygems--load the cache files instead"
+  
+  it "should revert to full load in the case of missing cache files"
   
   
 end
