@@ -1,7 +1,6 @@
 module Gem
   module QuickLoader
     def create_cache gem_paths
-      puts gem_paths
       gem_paths.each do |path|
         gem_versions = {}
         gem_paths = {}
@@ -20,10 +19,13 @@ module Gem
             end
           end
         end
-        pp gem_versions, gem_paths
+        gem_paths_with_contents = {}
+        # strip out directories, and the gem-d.d.d prefix
+        gem_paths.each{|k, v| gem_paths_with_contents[k] = Dir[v + '/**/*'].select{|f| !File.directory? f}.map{|fn| fn.sub(v + '/', '')}.join(' ')}
         File.open(path + '/.faster_rubygems_cache', 'w') do |f|
-          f.write Marshal.dump gem_paths
+          f.write Marshal.dump gem_paths_with_contents
         end
+        puts gem_paths_with_contents
       end
 
 
