@@ -2,13 +2,7 @@
 require File.dirname(__FILE__) + "/../lib/faster_rubygems"
 require 'sane'
 require 'rspec' # rspec 2
-
-begin
-  require 'spec/autorun'
-rescue LoadError
-  # ok
-end
-  require 'fileutils'
+require 'fileutils'
 
 describe Gem do
 
