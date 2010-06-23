@@ -1,11 +1,10 @@
 require File.dirname(__FILE__) + "/../lib/faster_rubygems"
-require File.dirname(__FILE__) + "/../lib/faster_rubygems/cache"
+require File.dirname(__FILE__) + "/../lib/faster_rubygems/prelude_create_cache"
 require 'sane'
 require 'rspec' # rspec 2
 require 'fileutils'
-raise 'rubyopt cannot be set' if ENV['RUBYOPT'] # avoid silly testing conflicts
+raise if ENV['RUBYOPT'] # avoid silly testing conflicts
 require 'rbconfig'
-
 
 describe 'can create cache file apropo' do
   before do

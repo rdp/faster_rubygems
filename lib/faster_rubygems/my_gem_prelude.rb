@@ -35,6 +35,7 @@ if defined?(Gem) then
       :sitedir           => RbConfig::CONFIG["sitedir"],
       :sitelibdir        => RbConfig::CONFIG["sitelibdir"],
     }
+    puts 'in my_gem_prelude\n\n\n', caller
 
     def self.dir
       @gem_home ||= nil
@@ -205,6 +206,7 @@ if defined?(Gem) then
           puts 'in push gemv3'
           # highest version gems *not* already active
 
+          if $using_gem_prelude_caches
           # copied and pasted...
                   require_paths = []
 
@@ -228,7 +230,7 @@ if defined?(Gem) then
                     end
                     # gem directories must come after -I and ENV['RUBYLIB']
                     $:[$:.find{|e|e.instance_variable_defined?(:@gem_prelude_index)}||-1,0] = require_paths
-          
+          end
           return false
         else
           if version_requirements.length > 1 then
@@ -263,7 +265,7 @@ if defined?(Gem) then
         numbers
       end
 
-      def calculate_all_highest_version_gems
+      def calculate_all_highest_version_gems load_them_into_the_require_path = false        
         Gem.path.each do |path|
           gems_directory = File.join(path, "gems")
 
@@ -282,7 +284,10 @@ if defined?(Gem) then
             end
           end
         end
-        return # early
+
+        return unless load_them_into_the_require_path
+        
+        # load them into $: now
         require_paths = []
 
         GemPaths.each_value do |path|
@@ -310,7 +315,7 @@ if defined?(Gem) then
       end
       
       def const_missing(constant)
-        puts 'consta missing', constant, 'caller is',caller
+        puts 'gem_prelude: const missing', constant if $VERBOSE || $DEBUG
         QuickLoader.load_full_rubygems_library
 
         if Gem.const_defined?(constant) then
@@ -332,9 +337,32 @@ if defined?(Gem) then
 
   end
 
-  Gem.calculate_all_highest_version_gems
-  # use cached load instead of loading lib paths into the load path here
-  require File.expand_path(File.dirname(__FILE__)) + "/prelude_cached_load"
-
+  have_caches = true
+  Gem.path.map{|path|
+    cache_name = path + '/.faster_rubygems_cache'
+    unless File.exist?(cache_name)
+      have_caches = false 
+      puts 'warning, cannot find gem cache:' + cache_name if $VERBOSE || $DEBUG
+    end
+  }
+  
+  
+  begin
+    if have_caches
+      $using_gem_prelude_caches = true
+      puts 'using caches'
+      Gem.calculate_all_highest_version_gems
+      # use cached load instead of loading lib paths into the load path here
+      require File.expand_path(File.dirname(__FILE__)) + "/prelude_cached_load"
+    else
+      $using_gem_prelude_caches = false
+      puts 'not using caches'
+      Gem.calculate_all_highest_version_gems true
+      Gem::QuickLoader.fake_rubygems_as_loaded
+    end
+  rescue Exception => e
+    puts "Error loading gem paths on load path in gem_prelude"
+    puts e
+    puts e.backtrace.join("\n")
+  end
 end
-

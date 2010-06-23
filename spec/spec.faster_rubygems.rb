@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + "/../lib/faster_rubygems"
 require 'sane'
 require 'rspec' # rspec 2
 require 'fileutils'
+raise if ENV['RUBYOPT']
 
 describe Gem do
 

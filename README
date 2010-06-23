@@ -36,11 +36,11 @@ Or
   you can install it to be used by default thus:
 
   >> require 'rubygems'
-  >> require 'faster_rubygems/install' # installs faster_rubygems to be use in place of normal rubygems when you do a "require 'rubygems'"
+  >> require 'faster_rubygems/override' # installs faster_rubygems to be use in place of normal rubygems when you do a "require 'rubygems'"
 
   # later, to revert back to normal, should you so desire:
   >> require 'rubygems'
-  >> require 'faster_rubygems/uninstall'
+  >> require 'faster_rubygems/unoverride'
 
   If all else fails in this process (it typically works fine), you can reinstall normal rubygems by running setup.rb from within its package.
 
@@ -66,13 +66,15 @@ $ gem install faster_require
 Now use it by default:
   
 1.9:  $ export RUBYOPTS=-rfaster_rubygems_with_faster_require_too
-1.8:  >> require 'faster_rubygems/install_with_faster_require_too' # installs faster_rubygems, as above, but also loads faster_require along with it.
+1.8:  >> require 'faster_rubygems/install_with_faster_require_too' # installs faster_rubygems, as above, but also loads faster_require along with it.  Very experimental for 1.8 at this point...
 
 == Related projects ==
 
 http://github.com/fabien/minigems/tree/master
 1.9's gem_prelude.rb
 http://www.ruby-forum.com/topic/191673
+
+Builder gem
 
 Source/contact:
 http://www.github.com/rdp/faster_rubygems
