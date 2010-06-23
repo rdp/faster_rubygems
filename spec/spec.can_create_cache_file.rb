@@ -72,7 +72,6 @@ describe 'can create cache file apropo' do
     FileUtils.rm_rf 'test_dir2'
   end
   
-  
   def create_file use_gem
     all = <<-EOS
       ENV['GEM_PATH'] = 'test_dir/gems/#{@ruby_ver}'
@@ -100,12 +99,15 @@ describe 'can create cache file apropo' do
     create_file false
   end
 
-  it "should create the caches on install/uninstall" do
-    fail
-  end
-  
   it "should work with the gem 'xxx' command" do
     create_file true
+  end
+  
+  it "should create the caches on install/uninstall" do
+    FileUtils.rm_rf Gem.path[0] + "/.faster_rubygems_cache"
+    Gem.create_cache_for_all! 
+    assert File.exist?(Gem.path[0] + "/.faster_rubygems_cache")
+    puts Gem.path[0] + "/.faster_rubygems_cache"
   end
   
   it "should punt with clear_paths! appropriately"

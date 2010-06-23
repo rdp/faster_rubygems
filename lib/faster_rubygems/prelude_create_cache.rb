@@ -43,5 +43,9 @@ module Gem
 
     end
     
+    def create_cache_for_all!
+      create_cache Gem.path
+    end
+    
   end
 end

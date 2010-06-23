@@ -31,8 +31,6 @@ describe Gem do
       raise f unless system(OS.ruby_bin + " #{f}")
     }
   end
-
-  
   
   context "gem xxx" do
     it "should allow you to load 'older' gem versions somehow, like maybe cacheing" # lower prio

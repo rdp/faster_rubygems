@@ -7,4 +7,4 @@ Dir.chdir File.dirname(__FILE__) + '/lib' do
   end
 end
 
-puts 'Installed--thank you for trying out -- require \'faster_rubygems\''
+puts 'Installed--thank you for trying outfaster_rubygems' # they never see this message tho...
