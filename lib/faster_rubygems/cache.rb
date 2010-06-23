@@ -1,7 +1,7 @@
 module Gem
   module QuickLoader
-    def create_cache gem_paths
-      gem_paths.each do |path|
+    def create_cache gems_paths
+      gems_paths.each do |path|
         gem_versions = {}
         gem_paths = {}
         gems_directory = File.join(path, "gems")
@@ -21,15 +21,27 @@ module Gem
         end
         gem_paths_with_contents = {}
         # strip out directories, and the gem-d.d.d prefix
-        gem_paths.each{|k, v| gem_paths_with_contents[k] = Dir[v + '/**/*'].select{|f| !File.directory? f}.map{|fn| fn.sub(v + '/', '')}.join(' ')}
-        File.open(path + '/.faster_rubygems_cache', 'w') do |f|
-          f.write Marshal.dump gem_paths_with_contents
+        gem_paths.each{|k, v| 
+          gem_with_version_number = v.split('/')[-1] 
+          gem_paths_with_contents[gem_with_version_number] = Dir[v + '/**/*'].select{|f| 
+            !File.directory? f
+          }.map{ |full_name| 
+            full_name.sub(v + '/', '')
+          }.join(' ')
+        }
+        
+        cache_path = path + '/.faster_rubygems_cache' 
+        # accomodate for those not running as sudo
+        if File.writable? path
+          File.open(cache_path, 'w') do |f|
+            f.write Marshal.dump(gem_paths_with_contents)
+          end
+        else
+          $stderr.puts "warning, unable to write cache to:" + cache_path
         end
-        puts gem_paths_with_contents
       end
 
-
     end
-
+    
   end
 end

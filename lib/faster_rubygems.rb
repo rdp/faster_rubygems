@@ -2,11 +2,10 @@
 
 # don't load it if normal rubygems is already defined
 if !defined?(Gem::Dependency)
-
-  if RUBY_VERSION < '1.9.0'    
+  if(  (RUBY_VERSION < '1.9.0') || !defined?(Gem))    # we're either 1.8 or 1.9 with --disable-gems
     # define it so gem_prelude will execute...
     module Gem; 
-    end     
+    end 
     require File.expand_path(File.dirname(__FILE__)) + "/my_gem_prelude.rb"
   end
 

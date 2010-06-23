@@ -10,7 +10,6 @@
 # * Should not expect Encoding.default_internal.
 # * Locale encoding is available.
 if defined?(Gem) then
-
   require 'rbconfig'
   # :stopdoc:
 
@@ -167,7 +166,7 @@ if defined?(Gem) then
         require 'rubygems'
         begin
           require 'rubygems.rb.bak' # just in case
-        rescue LoadError
+        rescue ::LoadError
           # ok
         end
       end
@@ -199,6 +198,7 @@ if defined?(Gem) then
       def push_gem_version_on_load_path(gem_name, *version_requirements)
         if version_requirements.empty?
           unless GemPaths.has_key?(gem_name) then
+            puts "Could not find RubyGem #{gem_name} (>= 0)\n" if $VERBOSE || $DEBUG
             raise Gem::LoadError, "Could not find RubyGem #{gem_name} (>= 0)\n"
           end
 
@@ -267,7 +267,8 @@ if defined?(Gem) then
 
             require_paths.concat paths
           else
-            require_paths << file if File.exist?(file = File.join(path, "bin"))
+          # bin shouldn't be necessary...
+          # require_paths << file if File.exist?(file = File.join(path, "bin"))
             require_paths << file if File.exist?(file = File.join(path, "lib"))
           end
         end
@@ -281,8 +282,9 @@ if defined?(Gem) then
         # gem directories must come after -I and ENV['RUBYLIB']
         $:[$:.find{|e|e.instance_variable_defined?(:@gem_prelude_index)}||-1,0] = require_paths
       end
-
+      
       def const_missing(constant)
+        puts 'consta missing', constant, 'caller is',caller
         QuickLoader.load_full_rubygems_library
 
         if Gem.const_defined?(constant) then
@@ -297,20 +299,15 @@ if defined?(Gem) then
         super unless Gem.respond_to?(method)
         Gem.send(method, *args, &block)
       end
+      
     end
 
     extend QuickLoader
 
   end
 
-  begin
-    Gem.push_all_highest_version_gems_on_load_path
-    Gem::QuickLoader.fake_rubygems_as_loaded
-  rescue Exception => e
-    puts "Error loading gem paths on load path in gem_prelude"
-    puts e
-    puts e.backtrace.join("\n")
-  end
+  # use cached load instead of loading lib paths into the load path here
+  require File.expand_path(File.dirname(__FILE__)) + "/prelude_cached_load"
 
 end
 

@@ -13,7 +13,7 @@ describe Gem do
     FileUtils.mkdir_p @gem_path
   end
 
-  context "speeding Gem.bin_path the fake sick way" do
+  context "speeding Gem.bin_path by inferring" do
 
     it "should fake guess the right path instead of loading full rubygems for now" do
       assert Gem.bin_path('after', 'after', ">= 0") =~ /after.*bin.*after/
@@ -24,6 +24,14 @@ describe Gem do
 
   end
 
+  it "should pass test files" do
+    Dir['files/*'].each{|f|
+      raise f unless system(OS.ruby_bin + " #{f}")
+    }
+  end
+
+  
+  
   context "gem xxx" do
     it "should allow you to load 'older' gem versions somehow, like maybe cacheing" # lower prio
   end
