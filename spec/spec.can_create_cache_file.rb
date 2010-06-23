@@ -1,7 +1,8 @@
 require File.dirname(__FILE__) + "/../lib/faster_rubygems"
 require File.dirname(__FILE__) + "/../lib/faster_rubygems/prelude_create_cache"
 require 'sane'
-require 'rspec' # rspec 2
+require 'spec' # rspec 1
+require 'spec/autorun'
 require 'fileutils'
 raise if ENV['RUBYOPT'] # avoid silly testing conflicts
 require 'rbconfig'
@@ -87,7 +88,11 @@ describe 'can create cache file apropo' do
       end
     EOS
     File.write 'test_file.rb', all
-    assert system(OS.ruby_bin + " --disable-gems test_file.rb")
+    if RUBY_VERSION >= '1.9.0'
+      assert system(OS.ruby_bin + " --disable-gems test_file.rb")
+    else
+      assert system(OS.ruby_bin + " test_file.rb")
+    end
   end
 
   it "should create the caches on install/uninstall" do
