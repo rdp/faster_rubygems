@@ -22,8 +22,8 @@ module Gem
         gem_paths_with_contents = {}
         # strip out directories, and the gem-d.d.d prefix
         gem_paths.each{|k, v| 
-          gem_with_version_number = v.split('/')[-1] 
-          gem_paths_with_contents[gem_with_version_number] = Dir[v + '/**/*'].select{|f| 
+          
+          gem_paths_with_contents[k] = Dir[v + '/**/*'].select{|f| 
             !File.directory? f
           }.map{ |full_name| 
             full_name.sub(v + '/', '')

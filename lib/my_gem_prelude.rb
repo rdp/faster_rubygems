@@ -197,12 +197,38 @@ if defined?(Gem) then
 
       def push_gem_version_on_load_path(gem_name, *version_requirements)
         if version_requirements.empty?
-          unless GemPaths.has_key?(gem_name) then
+          puts 'in push gemv2', GemPaths, gem_name
+          unless path = GemPaths[(gem_name)] then
             puts "Could not find RubyGem #{gem_name} (>= 0)\n" if $VERBOSE || $DEBUG
             raise Gem::LoadError, "Could not find RubyGem #{gem_name} (>= 0)\n"
           end
+          puts 'in push gemv3'
+          # highest version gems *not* already active
 
-          # highest version gems already active
+          # copied and pasted...
+                  require_paths = []
+
+                  if File.exist?(file = File.join(path, ".require_paths")) then
+                    paths = File.read(file).split.map do |require_path|
+                      File.join path, require_path
+                    end
+                    
+                    require_paths.concat paths
+                  else
+                    # bin shouldn't be necessary...
+                    # require_paths << file if File.exist?(file = File.join(path, "bin"))
+                    require_paths << file if File.exist?(file = File.join(path, "lib"))
+                  end
+
+                    # "tag" the first require_path inserted into the $LOAD_PATH to enable
+                    # indexing correctly with rubygems proper when it inserts an explicitly
+                    # gem version
+                    unless require_paths.empty? then
+                      require_paths.first.instance_variable_set(:@gem_prelude_index, true)
+                    end
+                    # gem directories must come after -I and ENV['RUBYLIB']
+                    $:[$:.find{|e|e.instance_variable_defined?(:@gem_prelude_index)}||-1,0] = require_paths
+          
           return false
         else
           if version_requirements.length > 1 then
@@ -237,7 +263,7 @@ if defined?(Gem) then
         numbers
       end
 
-      def push_all_highest_version_gems_on_load_path
+      def calculate_all_highest_version_gems
         Gem.path.each do |path|
           gems_directory = File.join(path, "gems")
 
@@ -256,7 +282,7 @@ if defined?(Gem) then
             end
           end
         end
-
+        return # early
         require_paths = []
 
         GemPaths.each_value do |path|
@@ -306,6 +332,7 @@ if defined?(Gem) then
 
   end
 
+  Gem.calculate_all_highest_version_gems
   # use cached load instead of loading lib paths into the load path here
   require File.expand_path(File.dirname(__FILE__)) + "/prelude_cached_load"
 

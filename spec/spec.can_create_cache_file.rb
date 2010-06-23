@@ -60,7 +60,7 @@ describe 'can create cache file apropo' do
   end
   
   it "should cache the version numbers of gems, too" do
-    Marshal.load(File.open(@gem_dir_cache)).to_s.should include "0.0.0"
+    Marshal.load(File.open(@gem_dir_cache)).to_s.should_not include "0.0.0"
   end
   
   it "should create two caches if you pass it two dirs" do
@@ -78,8 +78,8 @@ describe 'can create cache file apropo' do
       require File.dirname(__FILE__) + '/../lib/faster_rubygems'
 #      gem 'gem1'
       require 'a_file'
-      unless defined?(Gem1)
-        puts 'Gem1 not defined'
+      unless defined?(GEM1)
+        puts 'GEM1 not defined'
         exit 1
       end
       if defined?(Gem::Dependency)
@@ -88,9 +88,7 @@ describe 'can create cache file apropo' do
       end
     EOS
     File.write 'test_file.rb', all
-    require 'ruby-debug'
-    #debugger # pause it
-    assert system(OS.ruby_bin + "--disable-gems test_file.rb")
+    assert system(OS.ruby_bin + " --disable-gems test_file.rb")
   end
 
   it "should create the caches on install/uninstall" do
