@@ -33,7 +33,7 @@ module Gem
         if success
           require lib
         else
-          # re-raise
+          # re-raise the original exception...
           raise error
         end
         

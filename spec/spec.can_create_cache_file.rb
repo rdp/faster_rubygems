@@ -110,7 +110,7 @@ describe 'can create cache file apropo' do
     puts Gem.path[0] + "/.faster_rubygems_cache"
   end
   
-  it "should punt with clear_paths! appropriately"
+  it "should not cause a cyclic require that just calls and fails, calls and fails"
   
   it "should use that phreaky marker well (set it, et al)"
   

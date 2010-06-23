@@ -340,7 +340,9 @@ if defined?(Gem) then
     cache_name = path + '/.faster_rubygems_cache'
     puts cache_name
     if File.exist?(cache_name)
-      [path, Marshal.load(File.open(cache_name))]
+      File.open(cache_name, 'rb') do |f|
+        [path, Marshal.load(f)]
+      end
     else
       puts 'cache file does not exist! unexpected!' + cache_name
       nil
