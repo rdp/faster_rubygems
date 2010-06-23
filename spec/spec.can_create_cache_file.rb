@@ -11,6 +11,7 @@ describe 'can create cache file apropo' do
   end
   
   private
+  
   def create name, version = '0.0.0'
     new_name ='test_dir/gems/' + name  + "-" + version
     FileUtils.mkdir_p new_name + '/lib'
@@ -42,6 +43,15 @@ describe 'can create cache file apropo' do
     size2 = File.size('test_dir/.faster_rubygems_cache')
     assert size2 == size
   end  
+  
+  it "should create two caches if you pass it two dirs" do
+    create 'gem1'
+    FileUtils.mkdir_p 'test_dir2/gems'
+    Gem.create_cache ['test_dir', 'test_dir2']
+    Dir['**/.faster_rubygems_cache'].length.should == 2
+    FileUtils.rm_rf 'test_dir2'
+  end
+  
   
   it "should create the caches on install/uninstall"
   
