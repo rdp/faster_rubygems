@@ -72,11 +72,12 @@ describe 'can create cache file apropo' do
     FileUtils.rm_rf 'test_dir2'
   end
   
-  it "should not load full rubygems--load the cache files instead" do
+  
+  def create_file use_gem
     all = <<-EOS
       ENV['GEM_PATH'] = 'test_dir/gems/#{@ruby_ver}'
       require File.dirname(__FILE__) + '/../lib/faster_rubygems'
-#      gem 'gem1'
+      #{use_gem ? "gem 'gem1'" : nil}
       require 'a_file'
       unless defined?(GEM1)
         puts 'GEM1 not defined'
@@ -93,6 +94,10 @@ describe 'can create cache file apropo' do
     else
       assert system(OS.ruby_bin + " test_file.rb")
     end
+  end    
+  
+  it "should not load full rubygems--load the cache files instead" do
+    create_file false
   end
 
   it "should create the caches on install/uninstall" do
@@ -100,7 +105,7 @@ describe 'can create cache file apropo' do
   end
   
   it "should work with the gem 'xxx' command" do
-    fail
+    create_file true
   end
   
   it "should punt with clear_paths! appropriately"
