@@ -1,0 +1,35 @@
+
+whichr whichr benchmarks:
+
+
+
+mingw 1.8 
+
+  normal rubygems
+    0.83
+
+  faster_rubygems with cache
+    0.19
+
+mingw 1.9
+
+  normal rubygems:
+    3.8
+
+  faster_rubygems with cache:
+    0.24
+
+
+jruby, faster_rubygems with "full load path"
+
+  faster_rubygems without cache:
+    2.6
+    
+  faster_rubygems
+    
+  normal rubygems:
+    3.86
+    
+    
+lacking:
+  rails, faster_require for everybody...

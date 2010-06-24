@@ -10,6 +10,7 @@
 # * Should not expect Encoding.default_internal.
 # * Locale encoding is available.
 if defined?(Gem) then
+  start = Time.now if $VERBOSE
   require 'rbconfig'
   # :stopdoc:
 
@@ -141,6 +142,7 @@ if defined?(Gem) then
       @loaded_full_rubygems_library = false
 
       def self.load_full_rubygems_library
+        puts caller
         if $DEBUG || $VERBOSE
           $stderr.puts 'warning, loading full rubygems'
         end
@@ -346,30 +348,30 @@ if defined?(Gem) then
   end
 
   
-  ALL_CACHES = Gem.path.map{|path|
+  # if the gem dir doesn't exist, don't count it against us
+  ALL_CACHES = Gem.path.select{|path| File.exist?(path)}.map{|path|
     cache_name = path + '/.faster_rubygems_cache'
-    puts cache_name
     if File.exist?(cache_name)
       File.open(cache_name, 'rb') do |f|
         [path, Marshal.load(f)]
       end
     else
-      puts 'cache file does not exist! unexpected!' + cache_name
+      $stderr.puts 'cache file does not exist! unexpected!' + cache_name
       nil
     end
   }
-  ALL_CACHES.clear if ALL_CACHES.find{|data| data == nil}
   
-  
+  # we will use a clear cache as an indication of "non success" loading caches
+  ALL_CACHES.clear if ALL_CACHES.index(nil)
   
   begin
     if !ALL_CACHES.empty?
-      puts 'using caches'
+      puts 'faster_rubygems using caches' if $VERBOSE
       Gem.calculate_all_highest_version_gems false
       # use cached load instead of loading lib paths into the load path here
       require File.expand_path(File.dirname(__FILE__)) + "/prelude_cached_load"
     else
-      puts 'not using caches'
+      puts 'faster_rubygems not using caches!' if $VERBOSE
       Gem.calculate_all_highest_version_gems true
     end
     Gem::QuickLoader.fake_rubygems_as_loaded # won't be needing that regardless
@@ -378,4 +380,5 @@ if defined?(Gem) then
     puts e
     puts e.backtrace.join("\n")
   end
+  puts "faster_rubygems total load time:" + (Time.now - start).to_s if $VERBOSE
 end

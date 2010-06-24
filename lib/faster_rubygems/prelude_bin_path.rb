@@ -1,7 +1,7 @@
 module Gem
 
   module QuickLoader
-    def bin_path(gem_name, exec_name = null, *version_requirements)
+    def bin_path(gem_name, exec_name = nil, *version_requirements)
       unless GemPaths.has_key?(gem_name) then
         raise Gem::LoadError, "Could not find RubyGem #{gem_name} (>= 0)\n"
       end

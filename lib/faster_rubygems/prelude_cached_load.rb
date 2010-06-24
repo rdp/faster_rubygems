@@ -1,5 +1,3 @@
-require File.dirname(__FILE__) + '/ir_session'
-
 module Gem
     module QuickLoader
       module PreludeRequire
@@ -18,22 +16,18 @@ module Gem
       end
       
       def push_all_gems_that_might_match_and_reload_files lib, error
-        sub_lib = lib.gsub("\\", '/').split('/')[-1]
-        sub_lib = Regexp.new(sub_lib)
+        sub_lib = lib.gsub("\\", '/').split('/')[-1].split('.')[0]
         success = false
-        raise if ALL_CACHES.empty? # shouldn't be empty...
+        raise if ALL_CACHES.empty? # should never be empty...
         ALL_CACHES.each{|path, gem_list|
           for gem_name, long_file_list in gem_list 
-            if long_file_list =~ sub_lib
-              puts 'activating' + gem_name + sub_lib if $VERBOSE
-              #require_relative 'ir_session'
-              #repl(binding)
-              
+            if long_file_list.index(sub_lib)
+              puts 'activating' + gem_name + sub_lib.to_s if $VERBOSE
               if gem(gem_name)
-                puts 'gem activated' + gem_name if $VERBOSE
+                puts 'gem activated' + gem_name + sub_lib if $VERBOSE
                 success = true
               end
-              puts 'done activeating' + gem_name if $VERBOSE
+              puts 'done activeating' + gem_name + sub_lib if $VERBOSE
             end
             
           end

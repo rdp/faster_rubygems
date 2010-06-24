@@ -10,7 +10,7 @@ if !defined?(Gem::Dependency)
     require File.expand_path(File.dirname(__FILE__)) + "/faster_rubygems/my_gem_prelude"
   else
     if RUBY_VERSION >= '1.9.0'
-      puts 'warning: faster_rubygems: you loaded gem_prelude already so I cant speed that up'
+      puts 'warning: faster_rubygems: you loaded gem_prelude already so I cant speed that up' if $VERBOSE
     end
   end
 

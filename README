@@ -1,80 +1,70 @@
-A helper to dramatically speedup the time it takes to load rubygems.
+A helper gem to dramatically speedup the time it takes to startup a ruby script.
 
-i.e. it makes it so that "require 'rubygems'" no longer has to sap valuable time from your life.
+i.e. it makes it so that requiring rubygems no longer takes as long.
 
-Speed difference (windows box, lots of gem):
+Speed difference (a demo gem script, ruby 1.8 windows mingw):
 
-$ time ruby examples/require_rubygems_normal.rb
-real    0m1.109s
+normal rubygems:
 
-$ time ruby examples/require_fast_start.rb
-real    0m0.500s
+  $ timer ruby whichr
+  0.83
 
-Yea! Finally ruby script startup times that don't spend forever just reloading gem specs every single time...
+with faster_rubygems:
 
-It acts about the same as gem_prelude (prelude is 1.9 only currently) -- adds the paths of the highest version of each gem into your load path so they're ready to be required.
+  $ timer ruby whichr
+  0.19
 
-It is also good for 1.9 makes script startup faster.  To use it with 1.9 do an
-$ export RUBYOPTS=-rfaster_rubygems
+Yea!
 
-somewhere.
+It acts as a beefed up version of gem_prelude (prelude is 1.9 only currently), but only adds load paths on demand.
+
+It makes even more of a difference when used with 1.9:
+
+normal rubygems:
+
+  $ timer ruby whichr
+  3.8s
+
+with faster_rubygems:
+
+  $ timer ruby whichr
+  0.24s
 
 == installation ==
 
 $ gem install faster_rubygems
 
-== usage ==
-
-require 'faster_rubygems' at the top of your script.
-
-Or
-
-1.9:
-  $ export RUBYOPTS=-rfaster_rubygems
+1.9
+:
+  $ export RUBYOPT=-rfaster_rubygems --disable-gems
 
 1.8:
-  you can install it to be used by default thus:
+
+  you currently have to install to override normal rubygems by doing the following (in an irb session):
 
   >> require 'rubygems'
-  >> require 'faster_rubygems/override' # installs faster_rubygems to be use in place of normal rubygems when you do a "require 'rubygems'"
+  >> require 'faster_rubygems/override' # installs faster_rubygems to be use in place of normal rubygems when you do a "require 'rubygems'" so you don't have to worry about anything
 
-  # later, to revert back to normal, should you so desire:
+  # later, to revert this override, back to normal rubygems, should you so desire, do the following:
   >> require 'rubygems'
   >> require 'faster_rubygems/unoverride'
 
-  If all else fails in this process (it typically works fine), you can reinstall normal rubygems by running setup.rb from within its package.
+  If all else fails in this process (it has typically worked fine), you can 
+  reinstall normal rubygems by downloading its package (.tgz) and running ruby setup.rb within it.
 
-== More Speed Comparisons ==
+After installation, usage is automatic.
 
-For those interested, speed difference example on linux (250 gems):
-
-$ time ruby examples/require_rubygems_normal.rb
-ruby examples/require_rubygems_normal.rb  0.57s user 0.05s system 85% cpu 0.726 total
-
-$ time ruby examples/require_fast_start.rb
-ruby examples/require_fast_start.rb  0.04s user 0.02s system 46% cpu 0.121 total
-
-Note also that a few non conforming gems require the use of require 'rubygems' no matter what (they're pretty rare, though--you probably won't run into them, and I'm not aware of any).
-
-
-== Experimental ==
-
-If you want to be more aggressive you can try loading it with its cousin, faster_require:
-
-$ gem install faster_require
-
-Now use it by default:
-  
-1.9:  $ export RUBYOPTS=-rfaster_rubygems_with_faster_require_too
-1.8:  >> require 'faster_rubygems/install_with_faster_require_too' # installs faster_rubygems, as above, but also loads faster_require along with it.  Very experimental for 1.8 at this point...
+Note that it still loads full rubygems when it necessary (like when installing gems).  This is also automatic.
+Most of the credit for this goes to gem prelude.
 
 == Related projects ==
 
+rubygems (of course)
 http://github.com/fabien/minigems/tree/master
-1.9's gem_prelude.rb
+1.9's gem_prelude
 http://www.ruby-forum.com/topic/191673
+the Builder gem
 
-Builder gem
+Source/feedback:
 
-Source/contact:
 http://www.github.com/rdp/faster_rubygems

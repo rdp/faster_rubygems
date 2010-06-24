@@ -29,7 +29,8 @@ module Gem
             !File.directory? f
           }.map{ |full_name| 
             full_name.sub(v + '/', '')
-          }.join(' ')
+            full_name.split('/')[-1].split('.')[0] # just a of a.b.c.rb, for now
+          }
         }
         
         cache_path = path + '/.faster_rubygems_cache' 
