@@ -49,6 +49,7 @@ module Gem
     end
     
     def create_cache_for_all!
+      puts 'recreating all faster_rubygems\' caches'
       create_cache Gem.path
     end
     

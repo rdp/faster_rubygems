@@ -7,12 +7,7 @@ require 'jeweler'
 
   s.post_install_message = "
 
-installed! 1.9 use -> require 'faster_rubygems' 
-
-1.8: use require 'faster_rubygems' or install as the default thus:
-
->> require 'rubygems'
->> require 'faster_rubygems/install'
+installed! see the readme for usage after installation: http://github.com/rdp/faster_rubygems
 
 "
   s.add_development_dependency 'test-unit', '=1.2.3'
