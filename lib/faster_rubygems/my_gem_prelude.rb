@@ -195,6 +195,7 @@ if defined?(Gem) then
       GemPaths = {}
       GemVersions = {}
 
+      GemsActivated = {}
       def push_gem_version_on_load_path(gem_name, *version_requirements)
         if version_requirements.empty?
           unless path = GemPaths[(gem_name)] then
@@ -202,12 +203,17 @@ if defined?(Gem) then
             raise Gem::LoadError, "Could not find RubyGem #{gem_name} (>= 0)\n"
           end
           # highest version gems *not* already active
-
           if !ALL_CACHES.empty?
             # then we are using the caches, and the stuff isn't preloaded yet
             # copied and pasted...
                   require_paths = []
-
+                  if GemsActivated[gem_name]
+                    puts 'already activated' + gem_name if $VERBOSE
+                    return false
+                  else
+                    puts 'not already activated' + gem_name if $VERBOSE
+                    GemsActivated[gem_name] = true
+                  end
                   if File.exist?(file = File.join(path, ".require_paths")) then
                     paths = File.read(file).split.map do |require_path|
                       File.join path, require_path
@@ -227,8 +233,12 @@ if defined?(Gem) then
                       require_paths.first.instance_variable_set(:@gem_prelude_index, true)
                     end
                     # gem directories must come after -I and ENV['RUBYLIB']
-                    $:[$:.find{|e|e.instance_variable_defined?(:@gem_prelude_index)}||-1,0] = require_paths
+                   # TODO  puts $:.index{|e|e.instance_variable_defined?(:@gem_prelude_index)}
+                   # $:[$:.index{|e|e.instance_variable_defined?(:@gem_prelude_index)}||-1,0] = require_paths
+                    $:[0,0] = require_paths
+                    return true
           end
+          # normal flow when not using caches--it's already on the path
           return false
         else
           if version_requirements.length > 1 then
@@ -263,7 +273,7 @@ if defined?(Gem) then
         numbers
       end
 
-      def calculate_all_highest_version_gems load_them_into_the_require_path = false        
+      def calculate_all_highest_version_gems load_them_into_the_require_path
         Gem.path.each do |path|
           gems_directory = File.join(path, "gems")
 
@@ -355,14 +365,14 @@ if defined?(Gem) then
   begin
     if !ALL_CACHES.empty?
       puts 'using caches'
-      Gem.calculate_all_highest_version_gems
+      Gem.calculate_all_highest_version_gems false
       # use cached load instead of loading lib paths into the load path here
       require File.expand_path(File.dirname(__FILE__)) + "/prelude_cached_load"
     else
       puts 'not using caches'
       Gem.calculate_all_highest_version_gems true
-      Gem::QuickLoader.fake_rubygems_as_loaded
     end
+    Gem::QuickLoader.fake_rubygems_as_loaded # won't be needing that regardless
   rescue Exception => e
     puts "Error loading gem paths on load path in gem_prelude"
     puts e

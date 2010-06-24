@@ -93,7 +93,7 @@ describe 'can create cache file apropo' do
     else
       assert system(OS.ruby_bin + " test_file.rb")
     end
-  end    
+  end
   
   it "should not load full rubygems--load the cache files instead" do
     create_file false

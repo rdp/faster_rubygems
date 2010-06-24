@@ -25,7 +25,7 @@ module Gem
         # strip out directories, and the gem-d.d.d prefix
         gem_paths.each{|k, v| 
           
-          gem_paths_with_contents[k] = Dir[v + '/**/*'].select{|f| 
+          gem_paths_with_contents[k] = Dir[v + '/**/*.{rb,so,bundle}'].select{|f| 
             !File.directory? f
           }.map{ |full_name| 
             full_name.sub(v + '/', '')
@@ -33,7 +33,7 @@ module Gem
         }
         
         cache_path = path + '/.faster_rubygems_cache' 
-        # accomodate for those not running as sudo
+        # accomodate for those not running as sudo...
         if File.writable? path
           File.open(cache_path, 'wb') do |f|
             f.write Marshal.dump(gem_paths_with_contents)            
@@ -53,4 +53,5 @@ module Gem
     end
     
   end
+extend QuickLoader
 end
