@@ -1,4 +1,0 @@
-handle gem 'rails', '2.3.8'
-it uses find instead of index for $:
-
-            when ">", ">=", '=' then

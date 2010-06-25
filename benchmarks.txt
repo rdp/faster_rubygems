@@ -87,3 +87,4 @@ TODO:
  jruby spawning itself was *so slow* it seemed (timer.rb)  
  only regenerate appropriate cache files after gem installs...I guess.
  only cache lib filenames, not spec files, et al...
+ chmod after create (check if necessary first)

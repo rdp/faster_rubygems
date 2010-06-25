@@ -1,8 +1,7 @@
 require File.dirname(__FILE__) + "/../lib/faster_rubygems"
 require File.dirname(__FILE__) + "/../lib/faster_rubygems/prelude_create_cache"
 require 'sane'
-require 'spec' # rspec 1
-require 'spec/autorun'
+require 'rspec' # rspec 2
 require 'fileutils'
 raise if ENV['RUBYOPT'] # avoid silly testing conflicts
 require 'rbconfig'

@@ -14,6 +14,7 @@ faster_rubygems installed! see the readme for post-install instructions: http://
   s.add_development_dependency 'test-unit', '=2.0.6'
   s.add_development_dependency 'after', '=0.7.0'
   s.add_development_dependency 'sane'
+  s.add_development_dependency 'rspec', '>=2.0.0'
 #  s.add_dependency 'faster_require'
 
 end
