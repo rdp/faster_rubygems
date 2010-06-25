@@ -1,3 +1,5 @@
+= Faster Rubygems =
+
 A helper gem to dramatically speedup the time it takes to startup a ruby script.
 
 i.e. it makes it so that requiring rubygems no longer takes as long.
@@ -7,18 +9,18 @@ Speed difference (a demo gem script, ruby 1.8 windows mingw):
 normal rubygems:
 
   $ timer ruby whichr
-  0.83
+  0.83s
 
 with faster_rubygems:
 
   $ timer ruby whichr
-  0.19
+  0.19s
 
 Yea!
 
-It acts as a beefed up version of gem_prelude (prelude is 1.9 only currently), but only adds load paths on demand.
+It acts like a beefed up version of gem_prelude (prelude is 1.9 only currently), with a bit more cacheing thrown in there.
 
-It makes even more of a difference when used with 1.9:
+It makes even more of a difference when used with 1.9 on windows:
 
 normal rubygems:
 
@@ -34,33 +36,53 @@ with faster_rubygems:
 
 $ gem install faster_rubygems
 
+now there is a manual step that must be followed:
+
 1.9
-:
-  $ export RUBYOPT=-rfaster_rubygems --disable-gems
+
+  Set this environment variable:
+  RUBYOPT=-rfaster_rubygems --disable-gems
 
 1.8:
 
-  you currently have to install to override normal rubygems by doing the following (in an irb session):
+  no environment variables necessary.
+  
+  you currently have to override normal rubygems, however, by doing the following.
 
   >> require 'rubygems'
-  >> require 'faster_rubygems/override' # installs faster_rubygems to be use in place of normal rubygems when you do a "require 'rubygems'" so you don't have to worry about anything
+  >> require 'faster_rubygems/override' # installs faster_rubygems to be use in place of normal rubygems when you do a "require 'rubygems'"
 
-  # later, to revert this override, back to normal rubygems, should you so desire, do the following:
-  >> require 'rubygems'
-  >> require 'faster_rubygems/unoverride'
-
-  If all else fails in this process (it has typically worked fine), you can 
-  reinstall normal rubygems by downloading its package (.tgz) and running ruby setup.rb within it.
-
-After installation, usage is automatic.
+  Done!
+  After these steps, usage is automatic.
+  Note that it still loads full rubygems when necessary (for example when installing new gems).  This is also automatic.
 
 
-To regenerate cache files (should never be necessary, but if you for some reason think yours are stale) do
+== Rails ==
+
+Unfortunately this gem does not greatly speed up rails--it speeds up any script that 
+doesn't require full rubygems (which is most, but not rails).
+
+If you want to speed up rails, you'll want to use the faster_require gem 
+(though they do work together splendidly). http://github.com/rdp/faster_require
+
+See http://github.com/rdp/faster_rubygems/blob/master/benchmarks.txt for a full breakdown and more benchmarks.
+
+== Trouble Shooting ==
+
+# if you wish to revert back to normal rubygems, do the following:
+>> require 'rubygems'
+>> require 'faster_rubygems/unoverride'
+
+If all else fails in this process (it has typically worked fine), you can 
+reinstall normal rubygems by downloading its package (.tgz) and running ruby setup.rb within it.
+
+
+To regenerate cache files (should never really be necessary, but if you for some reason think yours are stale) do the following:
+
 >> require 'rubygems'
 >> require 'faster_rubygems/create_cache_for_all'
 
-Note that it still loads full rubygems when it necessary (like when installing gems).  This is also automatic.
-Most of the credit for this goes to gem prelude.
+Most of the credit for this gem goes to gem prelude.
 
 == Related projects ==
 
