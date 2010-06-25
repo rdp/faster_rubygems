@@ -205,7 +205,7 @@ if defined?(Gem) then
             raise Gem::LoadError, "Could not find RubyGem #{gem_name} (>= 0)\n"
           end
           # highest version gems *not* already active
-          if !ALL_CACHES.empty?
+          if !AllCaches.empty?
             # then we are using the caches, and the stuff isn't preloaded yet
             # copied and pasted...
                   require_paths = []
@@ -345,7 +345,7 @@ if defined?(Gem) then
       end
   
        # if the gem dir doesn't exist, don't count it against us
-       ALL_CACHES = Gem.path.select{|path| File.exist?(path)}.map{|path|
+       AllCaches = Gem.path.select{|path| File.exist?(path)}.map{|path|
          cache_name = path + '/.faster_rubygems_cache'
          if File.exist?(cache_name)
             File.open(cache_name, 'rb') do |f|
@@ -358,7 +358,7 @@ if defined?(Gem) then
       }
       
       # we will use a clear cache as an indication of "non success" loading caches
-      ALL_CACHES.clear if ALL_CACHES.index(nil)
+      AllCaches.clear if AllCaches.index(nil)
       
     end
 
@@ -368,8 +368,8 @@ if defined?(Gem) then
 
   
   begin
-    if !Gem::QuickLoader::ALL_CACHES.empty?
-      puts 'faster_rubygems using caches', Gem::QuickLoader::ALL_CACHES.map{|fn, contents| fn} if $VERBOSE
+    if !Gem::QuickLoader::AllCaches.empty?
+      puts 'faster_rubygems using caches', Gem::QuickLoader::AllCaches.map{|fn, contents| fn} if $VERBOSE
       Gem.calculate_all_highest_version_gems false
       # use cached load instead of loading lib paths into the load path here
       require File.expand_path(File.dirname(__FILE__)) + "/prelude_cached_load"
