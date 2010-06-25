@@ -142,7 +142,7 @@ if defined?(Gem) then
       @loaded_full_rubygems_library = false
 
       def self.load_full_rubygems_library
-        puts caller
+        puts 'faster_rubygems: loading full rubygems',caller if $VERBOSE
         if $DEBUG || $VERBOSE
           $stderr.puts 'warning, loading full rubygems'
         end
@@ -210,10 +210,8 @@ if defined?(Gem) then
             # copied and pasted...
                   require_paths = []
                   if GemsActivated[gem_name]
-                    puts 'already activated' + gem_name if $VERBOSE
                     return false
                   else
-                    puts 'not already activated' + gem_name if $VERBOSE
                     GemsActivated[gem_name] = true
                   end
                   if File.exist?(file = File.join(path, ".require_paths")) then
@@ -250,10 +248,15 @@ if defined?(Gem) then
 
           requirement, version = version_requirements[0].split
           requirement.strip!
+          # accomodate for gem 'xxx', '2.3.8'
+          if !version
+            version = requirement
+            requirement = '='
+          end
 
           if loaded_version = GemVersions[gem_name] then
             case requirement
-            when ">", ">=" then
+            when ">", ">=", '=' then
               return false if
                 (loaded_version <=> Gem.integers_for(version)) >= 0
             when "~>" then
@@ -340,6 +343,22 @@ if defined?(Gem) then
         super unless Gem.respond_to?(method)
         Gem.send(method, *args, &block)
       end
+  
+       # if the gem dir doesn't exist, don't count it against us
+       ALL_CACHES = Gem.path.select{|path| File.exist?(path)}.map{|path|
+         cache_name = path + '/.faster_rubygems_cache'
+         if File.exist?(cache_name)
+            File.open(cache_name, 'rb') do |f|
+              [path, Marshal.load(f)]
+            end
+         else
+           $stderr.puts 'faster_rubygems: a cache file does not exist! reverting to full load path ' + cache_name
+           nil
+         end
+      }
+      
+      # we will use a clear cache as an indication of "non success" loading caches
+      ALL_CACHES.clear if ALL_CACHES.index(nil)
       
     end
 
@@ -348,25 +367,9 @@ if defined?(Gem) then
   end
 
   
-  # if the gem dir doesn't exist, don't count it against us
-  ALL_CACHES = Gem.path.select{|path| File.exist?(path)}.map{|path|
-    cache_name = path + '/.faster_rubygems_cache'
-    if File.exist?(cache_name)
-      File.open(cache_name, 'rb') do |f|
-        [path, Marshal.load(f)]
-      end
-    else
-      $stderr.puts 'cache file does not exist! unexpected!' + cache_name
-      nil
-    end
-  }
-  
-  # we will use a clear cache as an indication of "non success" loading caches
-  ALL_CACHES.clear if ALL_CACHES.index(nil)
-  
   begin
-    if !ALL_CACHES.empty?
-      puts 'faster_rubygems using caches' if $VERBOSE
+    if !Gem::QuickLoader::ALL_CACHES.empty?
+      puts 'faster_rubygems using caches', Gem::QuickLoader::ALL_CACHES.map{|fn, contents| fn} if $VERBOSE
       Gem.calculate_all_highest_version_gems false
       # use cached load instead of loading lib paths into the load path here
       require File.expand_path(File.dirname(__FILE__)) + "/prelude_cached_load"

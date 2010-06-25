@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + "/prelude_bin_path" # Gem.integers_for, for 1.9
 module Gem
   module QuickLoader
     def create_cache gems_paths
+      puts 'faster_rubygems: creating caches'
       gems_paths.each do |path|
         gem_versions = {}
         gem_paths = {}
@@ -33,14 +34,13 @@ module Gem
           }
         }
         
-        cache_path = path + '/.faster_rubygems_cache' 
+        cache_path = path + '/.faster_rubygems_cache'
+        puts '.'
+        $stdout.flush
         # accomodate for those not running as sudo...
         if File.writable? path
           File.open(cache_path, 'wb') do |f|
             f.write Marshal.dump(gem_paths_with_contents)            
-          end
-          if $VERBOSE
-            puts 'dumping ', gem_paths_with_contents.inspect.length, 'to', cache_path
           end
         else
           $stderr.puts "warning, unable to write cache to:" + cache_path
@@ -50,7 +50,7 @@ module Gem
     end
     
     def create_cache_for_all!
-      puts 'recreating all faster_rubygems\' caches'
+      puts 'recreating all faster_rubygems caches'
       create_cache Gem.path
     end
     

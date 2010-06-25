@@ -6,7 +6,7 @@
       require 'fileutils'
       old = rubygems_path
       new =  old + ".bak.rb"
-      raise 'cannot install twice--please run uninstall first' if File.exist?(new)
+      raise 'cannot install twice--please run unoverride first' if File.exist?(new)
       FileUtils.cp old, new
       File.open(old, 'w') do |f|
         f.write "require 'faster_rubygems'\n"

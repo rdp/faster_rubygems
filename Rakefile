@@ -7,7 +7,7 @@ require 'jeweler'
 
   s.post_install_message = "
 
-faster_rubygems installed! see the readme for usage after installation: http://github.com/rdp/faster_rubygems
+faster_rubygems installed! see the readme for post-install instructions: http://github.com/rdp/faster_rubygems
 
 "
   s.add_development_dependency 'test-unit', '=1.2.3'

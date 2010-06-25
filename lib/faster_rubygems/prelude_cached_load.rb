@@ -21,13 +21,13 @@ module Gem
         raise if ALL_CACHES.empty? # should never be empty...
         ALL_CACHES.each{|path, gem_list|
           for gem_name, long_file_list in gem_list 
-            if long_file_list.index(sub_lib)
-              puts 'activating' + gem_name + sub_lib.to_s if $VERBOSE
+            if idx = long_file_list.index(sub_lib)
+              puts 'activating' + gem_name + sub_lib.to_s if $DEBUG
               if gem(gem_name)
-                puts 'gem activated' + gem_name + sub_lib if $VERBOSE
+                puts 'gem activated ' + gem_name + ' ' + sub_lib + ' ' + long_file_list[idx] if $VERBOSE || $DEBUG
                 success = true
               end
-              puts 'done activeating' + gem_name + sub_lib if $VERBOSE
+              puts 'done activeating' + gem_name + sub_lib if $DEBUG
             end
             
           end

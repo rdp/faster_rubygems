@@ -54,6 +54,11 @@ $ gem install faster_rubygems
 
 After installation, usage is automatic.
 
+
+To regenerate cache files (should never be necessary, but if you for some reason think yours are stale) do
+>> require 'rubygems'
+>> require 'faster_rubygems/create_cache_for_all'
+
 Note that it still loads full rubygems when it necessary (like when installing gems).  This is also automatic.
 Most of the credit for this goes to gem prelude.
 

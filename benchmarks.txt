@@ -1,35 +1,89 @@
-
-whichr whichr benchmarks:
-
-
+[ $ whichr whichr] benchmarks (the whichr gem just behaves like the "which" command in Linux) best time seen:
 
 mingw 1.8 
 
   normal rubygems
-    0.83
+    0.77
 
   faster_rubygems with cache
-    0.19
+    0.14
+    
+  faster_rubygems without cache:
+    0.20
 
 mingw 1.9
 
   normal rubygems:
-    3.8
+    3.79
 
   faster_rubygems with cache:
-    0.24
-
-
-jruby, faster_rubygems with "full load path"
-
+    0.19
+    
   faster_rubygems without cache:
-    2.6
-    
-  faster_rubygems
-    
+    0.50  
+
+jruby, 1.8 mode
+
   normal rubygems:
-    3.86
+    2.31
+
+  faster_rubygems without cache (deleted the cache file temporarily to force it to not use it):
+    1.15
+    
+  faster_rubygems with cache:
+    1.11
     
     
-lacking:
-  rails, faster_require for everybody...
+rails 2.3.8 [ $ ruby script\runner -e production "puts 3" ] 
+    Unfortunately rails requires a load of full rubygems.  So currently faster_rubygems doesn't help it much.
+
+faster_require (other gem) seems to help, however.
+
+1.9
+    normal gem_prelude[RUBYOPT=]
+      20.85
+
+    faster_rubygems without cache [RUBYOPT=-rfaster_rubygems]
+      20.7
+
+    faster_rubygems with cache [RUBYOPT=-rfaster_rubygems --disable-gems]:
+      12.10
+      
+    normal gem_prelude, with faster_require gem [RUBYOPT=-rfaster_require]:
+      8.93
+      
+    faster_rubygems, without cache, with faster_require [RUBYOPT=-rfaster_rubygems -rfaster_require]:
+      8.99 
+      
+           * recommend this configuration for ruby 1.9 and rails.
+      
+    faster_rubygems, with cache [RUBYOPT=--disable-gems -rfaster_rubygems -rfaster_require]
+      fail (gotta fix that, then will probably be fastest option)
+    
+1.8
+
+  normal rubygems:
+    6.54
+  
+  faster_rubygems without cache:
+    6.12
+    
+  faster_rubygems with cache:
+    6.48
+    
+  normal rubygems, faster_require:
+    3.53
+    
+  faster_rubygems with cache and with faster_require (have to use it as require 'faster_require')
+    2.97
+      
+       * recommend this configuration, which means you'll have to add a require 'faster_require' to your rails script at the beginning, like in boot.rb
+    
+  faster_rubygems without cache and with faster_require
+    3.31
+
+    
+TODO:
+ jruby spawning itself was *so slow* it seemed (timer.rb)  
+ only regenerate appropriate cache files after gem installs...I guess.
+ only cache lib filenames, not spec files, et al...
