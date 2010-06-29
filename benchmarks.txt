@@ -1,4 +1,8 @@
-[ $ whichr whichr] benchmarks (the whichr gem just behaves like the "which" command in Linux) best time seen:
+Benchmarks against normal rubygems and gem_prelude in 1.9 (its normal)
+
+
+
+benchmarks runing [$ whichr whichr] (the whichr gem just behaves like the "which" command in Linux), best time seen:
 
 mingw 1.8 
 

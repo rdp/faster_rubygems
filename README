@@ -44,17 +44,10 @@ now there is a manual step that must be followed:
   RUBYOPT=-rfaster_rubygems --disable-gems
 
 1.8:
-
-  no environment variables necessary.
+  Installs itself by default.
   
-  you currently have to override normal rubygems, however, by doing the following.
-
-  >> require 'rubygems'
-  >> require 'faster_rubygems/override' # installs faster_rubygems to be use in place of normal rubygems when you do a "require 'rubygems'"
-
-  Done!
-  After these steps, usage is automatic.
-  Note that it still loads full rubygems when necessary (for example when installing new gems).  This is also automatic.
+  
+Note that full rubygems will still be loaded when necessary (for example when installing new gems).  This is automatic.
 
 
 == Rails ==
