@@ -200,7 +200,7 @@ if defined?(Gem) then
       GemsActivated = {}
       def push_gem_version_on_load_path(gem_name, *version_requirements)
         if version_requirements.empty?
-          unless path = GemPaths[(gem_name)] then
+          unless path = GemPaths[gem_name] then
             puts "Could not find RubyGem #{gem_name} (>= 0)\n" if $VERBOSE || $DEBUG
             raise Gem::LoadError, "Could not find RubyGem #{gem_name} (>= 0)\n"
           end

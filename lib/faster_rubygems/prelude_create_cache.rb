@@ -26,12 +26,18 @@ module Gem
         # strip out directories, and the gem-d.d.d prefix
         gem_paths.each{|k, v| 
           
-          gem_paths_with_contents[k] = Dir[v + '/**/*.{rb,so,bundle}'].select{|f| 
+          files = Dir[v + '/**/*.{rb,so,bundle}'].select{|f| 
             !File.directory? f
           }.map{ |full_name| 
             full_name.sub(v + '/', '')
             full_name.split('/')[-1].split('.')[0] # just a of a.b.c.rb, for now
           }
+          
+          hash_of_files = {}
+          files.each{|small_filename|
+            hash_of_files[small_filename] = true
+          }
+          gem_paths_with_contents[k] = hash_of_files
         }
         
         cache_path = path + '/.faster_rubygems_cache'
