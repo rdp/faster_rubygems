@@ -13,6 +13,10 @@ If you're on 1.9 please set your RUBYOPT env. variable thus, to use it:
 
 $ export RUBYOPT=--disable-gems -rfaster_rubygems
 
+or (windows)
+
+C:\>set RUBYOPT=--disable-gems -rfaster_rubygems
+
 "
   s.add_development_dependency 'test-unit', '=1.2.3'
   s.add_development_dependency 'test-unit', '=2.0.6'
