@@ -1,0 +1,2 @@
+puts 'faster_rubygems: attempting to recreate all caches' 
+require "faster_rubygems/create_cache_for_all"
