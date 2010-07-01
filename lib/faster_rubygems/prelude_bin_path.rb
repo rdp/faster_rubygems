@@ -44,13 +44,13 @@ module Gem
       bin_path(gem_name, exec_name, *version_requirements)
     end
 
-    # 1.9.1's gem_prelude doesn't have this for some reason...
+    # 1.9.1's gem_prelude doesn't seem to have this for some reason...
     def integers_for(gem_version)
         numbers = gem_version.split(".").collect {|n| n.to_i}
         numbers.pop while numbers.last == 0
         numbers << 0 if numbers.empty?
         numbers
-    end
+    end unless Gem.respond_to?(:integers_for)
     
   end
   

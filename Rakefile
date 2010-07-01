@@ -11,11 +11,10 @@ faster_rubygems installed into your site_ruby directory.
 
 If you're on 1.9 please set your RUBYOPT env. variable thus, to use it:
 
-$ export RUBYOPT=--disable-gems -rfaster_rubygems
-
-or (windows)
-
-C:\>set RUBYOPT=--disable-gems -rfaster_rubygems
+1.9 only:
+   $ export RUBYOPT=--disable-gems -rfaster_rubygems   
+   or (windows)
+   C:\>set RUBYOPT=--disable-gems -rfaster_rubygems
 
 "
   s.add_development_dependency 'test-unit', '=1.2.3'

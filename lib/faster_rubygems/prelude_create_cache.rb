@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + "/prelude_bin_path" # Gem.integers_for, for 1.9
 module Gem
   module QuickLoader
     def create_cache gems_paths
-      puts 'faster_rubygems: creating all caches'
+      puts 'faster_rubygems: creating caches'
       gems_paths.each do |path|
         gem_versions = {}
         gem_paths = {}
