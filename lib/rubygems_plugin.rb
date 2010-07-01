@@ -1,12 +1,20 @@
 Gem.post_install {
-  require "faster_rubygems/create_cache_for_all"
+  # accomodate for when they install more than one at a time...
+  # a straight require won't cut it...
+  success = require "faster_rubygems/create_cache_for_all"
+  if !success
+    Gem.create_cache_for_all!  
+  end
 }
 
 Gem.post_uninstall {
-  require "faster_rubygems/create_cache_for_all"
+  success = require "faster_rubygems/create_cache_for_all"
+  if !success
+    Gem.create_cache_for_all!  
+  end
 }
 
-Gem.pre_uninstall { |gem_installer_instance, gem_spec|
+Gem.pre_uninstall { |gem_installer_instance|
   
   if gem_installer_instance.spec.name == 'faster_rubygems' && RUBY_VERSION[0..2] == '1.8'
     begin
