@@ -102,6 +102,8 @@ describe 'can create cache file apropo' do
     create_file true
   end
   
+  it 'should work with capitalized like RMagick -> Magick'
+  
   it "should create the caches on install/uninstall" do
     FileUtils.rm_rf Gem.path[0] + "/.faster_rubygems_cache"
     Gem.create_cache_for_all! 
