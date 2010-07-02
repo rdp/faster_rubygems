@@ -278,6 +278,7 @@ if defined?(Gem) then
       end
 
       def calculate_all_highest_version_gems load_them_into_the_require_path
+        start = Time.now if $VERBOSE
         Gem.path.each do |path|
           gems_directory = File.join(path, "gems")
 
@@ -296,6 +297,7 @@ if defined?(Gem) then
             end
           end
         end
+        puts "faster_rubygems: took " + (Time.now - start).to_s + "s to scan the dirs for versions" if $VERBOSE
         # TODO don't require iterating over all these, since you can extrapolate them from the cache files...
 
         return unless load_them_into_the_require_path
@@ -344,9 +346,10 @@ if defined?(Gem) then
         super unless Gem.respond_to?(method)
         Gem.send(method, *args, &block)
       end
-  
+      
+      start_load = Time.now if $VERBOSE
        # if the gem dir doesn't exist, don't count it against us
-       AllCaches = Gem.path.select{|path| File.exist?(path)}.map{|path|
+      AllCaches = Gem.path.select{|path| File.exist?(path)}.map{|path|
          cache_name = path + '/.faster_rubygems_cache'
          if File.exist?(cache_name)
             File.open(cache_name, 'rb') do |f|
@@ -357,6 +360,7 @@ if defined?(Gem) then
            nil
          end
       }
+      puts "faster_rubygems: took " + (Time.now - start_load).to_s + "s to load the cache files" if $VERBOSE
       
       # we will use a clear cache as an indication of "non success" loading caches
       if AllCaches.index(nil)

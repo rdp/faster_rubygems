@@ -1,2 +1,11 @@
-puts 'faster_rubygems: attempting to recreate all caches' 
-require "faster_rubygems/create_cache_for_all"
+first = ARGV[0]
+if first == "--unoverride"
+ require "faster_rubygems/unoverride"
+elsif first == "--override"
+ require "faster_rubygems/override"
+elsif first == '--help' || first == '-h'
+ puts 'syntax: --override or --unoverride (both 1.8 only) or just nothing to recreate caches'
+else
+  puts 'faster_rubygems: attempting to recreate all caches' 
+  require "faster_rubygems/create_cache_for_all"
+end
