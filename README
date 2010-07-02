@@ -18,7 +18,7 @@ with faster_rubygems:
 
 Yea!
 
-It acts like a beefed up version of gem_prelude (prelude is 1.9 only currently), with a bit more cacheing thrown in there.
+It acts like a beefed up version of gem_prelude (prelude is 1.9 only currently), with more cacheing thrown in there.
 
 It makes even more of a difference when used with 1.9 on windows:
 
@@ -63,19 +63,16 @@ See http://github.com/rdp/faster_rubygems/blob/master/benchmarks.txt for a full 
 == Trouble Shooting ==
 
 # if you wish to revert back to normal rubygems, do the following:
->> require 'rubygems'
->> require 'faster_rubygems/unoverride'
+$ faster_rubygems --unoverride
 
 If all else fails in this process (it has typically worked fine), you can 
 reinstall normal rubygems by downloading its package (.tgz) and running ruby setup.rb within it.
 
-
 To regenerate cache files (should never really be necessary, but if you for some reason think yours are stale) do the following:
 
->> require 'rubygems'
->> require 'faster_rubygems/create_cache_for_all'
+$ faster_rubygems # by default it recaches what it can
 
-Most of the credit for this gem goes to gem prelude.
+Most of the credit for this gem goes to gem prelude and some ideas by Charles Nutter.
 
 == Related projects ==
 
