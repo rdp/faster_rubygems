@@ -1,10 +1,46 @@
 = Faster Rubygems =
 
-A helper gem to dramatically speedup the time it takes to startup a ruby script.
 
-i.e. it makes it so that requiring rubygems no longer takes as long.
 
-Speed difference (a demo gem script, ruby 1.8 windows mingw):
+This gem makes loading rubygems *much* faster.
+
+What it does is cache the location of files in your gem dirs, ex:
+
+/lib/ruby/gems/1.8/jruby/{active_support, active_record}
+
+it creates this file:
+
+/lib/ruby/gems/1.8/jruby/.faster_rubygems_cache
+
+Then it uses *that* instead of loading full blown rubygems.
+
+
+Timing (on doze with ~ 50 gems installed):
+
+no rubygems at all:
+
+$ jruby -e 1
+0.68s.
+
+require 'rubygems' time:
+
+$ jruby -rubygems -e 1
+
+2.36s normal rubygems: -> 0.94s with faster_rubygems
+
+time to do a rake -V (get rake version):
+
+$ jruby -S rake -V
+
+2.48s with normal rubygems: -> 1.50s with faster_rubygems
+
+(rake installed into site_ruby and loaded without rubygems takes 1.41s).  
+
+Thus we see that loading of rubygems has decreased from 1.4s to between 0.1s and 0.3s
+
+
+with mingw (windows).
+
 
 normal rubygems:
 
@@ -16,25 +52,10 @@ with faster_rubygems:
   $ timer ruby whichr
   0.19s
 
-Yea!
-
-It acts like a beefed up version of gem_prelude (prelude is 1.9 only currently), with more cacheing thrown in there.
-
-It makes even more of a difference when used with 1.9 on windows:
-
-normal rubygems:
-
-  $ timer ruby whichr
-  3.8s
-
-with faster_rubygems:
-
-  $ timer ruby whichr
-  0.24s
 
 == installation ==
 
-$ gem install faster_rubygems
+$ gem install faster_rubygems # installs faster_rubygems into your site lib, overrides normal rubygems
 
 now there is a manual step that must be followed:
 
