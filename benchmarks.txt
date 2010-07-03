@@ -83,8 +83,13 @@ faster_require (other gem) seems to help, however.
     
   faster_rubygems without cache and with faster_require
     3.31
-
     
+jruby linux:
+  $ jruby -S whichr whichr
+    2.35s -> 1.5s
+
+
+
 TODO:
  jruby spawning itself was *so slow* it seemed (timer.rb)  
  only regenerate appropriate cache files after gem installs...I guess.
