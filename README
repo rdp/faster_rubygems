@@ -70,6 +70,7 @@ now there is a manual step that must be followed:
   
 Note that full rubygems will still be loaded when necessary (for example when installing new gems).  This is automatic.
 
+Also note that using this reduces the memory footprint of your application by not having to load full rubygems, with its files and accompanying gemspecs, which are traditionally all re-loaded every time, but not with faster_rubygems.
 
 == Rails ==
 
@@ -102,6 +103,7 @@ http://github.com/fabien/minigems/tree/master
 1.9's gem_prelude
 http://www.ruby-forum.com/topic/191673
 the Builder gem
+http://github.com/jeremyevans/zozo
 
 Source/feedback:
 
