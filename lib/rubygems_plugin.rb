@@ -1,13 +1,17 @@
 Gem.post_install {
   # accomodate for when they install more than one at a time...
   # a straight require won't cut it...
-  print 'because of new gem installation '
-  load "faster_rubygems/create_cache_for_all.rb"
+  @recreate_proc ||= at_exit {
+    print 'because of new gem installation '
+    load "faster_rubygems/create_cache_for_all.rb"
+  }
 }
 
 Gem.post_uninstall {
-  print 'because of gem uninstallation '
-  load "faster_rubygems/create_cache_for_all.rb"
+  @recreate_proc ||= at_exit {
+    print 'because of gem uninstallation '
+    load "faster_rubygems/create_cache_for_all.rb"
+  }
 }
 
 Gem.pre_uninstall { |gem_installer_instance|
