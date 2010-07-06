@@ -8,6 +8,7 @@ Gem.post_install {
 }
 
 Gem.post_uninstall {
+  # why doesn't this work right? ahh well...
   @recreate_proc ||= at_exit {
     print 'because of gem uninstallation '
     load "faster_rubygems/create_cache_for_all.rb"
