@@ -1,5 +1,4 @@
 
-
 benchmarks runing [$ whichr whichr] (the whichr gem just behaves like the "which" command in Linux), best time seen:
 
 mingw 1.8 
@@ -12,6 +11,8 @@ mingw 1.8
     
   faster_rubygems without cache:
     0.20
+
+  (on an older computer with 1.8 1s -> 0.3s)
 
 mingw 1.9
 
@@ -83,8 +84,13 @@ faster_require (other gem) seems to help, however.
     
   faster_rubygems without cache and with faster_require
     3.31
-
     
+jruby linux:
+  $ jruby -S whichr whichr
+    2.35s -> 1.5s
+
+
+
 TODO:
  jruby spawning itself was *so slow* it seemed (timer.rb)  
  only regenerate appropriate cache files after gem installs...I guess.

@@ -53,6 +53,14 @@ with faster_rubygems:
   0.19s
 
 
+linux:
+
+ $ time ruby -S whichr whichr
+     ruby 1.9: 0.6s -> 0.13s
+     ruby 1.8: 0.17s -> 0.09s
+
+ Thus we see that it helps startup time for 1.9 on Linux, but not much for 1.8 on Linux.
+
 == installation ==
 
 $ gem install faster_rubygems # installs faster_rubygems into your site lib, overrides normal rubygems
@@ -70,6 +78,7 @@ now there is a manual step that must be followed:
   
 Note that full rubygems will still be loaded when necessary (for example when installing new gems).  This is automatic.
 
+Also note that using this reduces the memory footprint of your application by not having to load full rubygems, with its files and accompanying gemspecs, which are traditionally all re-loaded every time, but not with faster_rubygems.
 
 == Rails ==
 
@@ -102,6 +111,7 @@ http://github.com/fabien/minigems/tree/master
 1.9's gem_prelude
 http://www.ruby-forum.com/topic/191673
 the Builder gem
+http://github.com/jeremyevans/zozo
 
 Source/feedback:
 
