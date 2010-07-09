@@ -3,10 +3,10 @@ module Gem
     module PreludeRequire
       def require_prelude lib
         begin
-          require_pre_prelude lib
+          require_original_non_prelude lib
         rescue ::LoadError => e
           if Gem.push_all_gems_that_might_match_and_reload_files(lib, e)
-            require_pre_prelude lib
+            require_original_non_prelude lib
           else
             # re-raise
             raise e
@@ -40,7 +40,7 @@ end
 
 module Kernel
   include Gem::QuickLoader::PreludeRequire
-  alias :require_pre_prelude :require
+  alias :require_original_non_prelude :require
   alias :require :require_prelude
 end
 

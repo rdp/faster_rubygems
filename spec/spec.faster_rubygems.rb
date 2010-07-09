@@ -1,7 +1,11 @@
 # to test in 1.8.x, make sure to use ruby specname.rb
 require File.dirname(__FILE__) + "/../lib/faster_rubygems"
 require 'sane'
-require 'rspec' # rspec 2
+begin
+  require 'rspec' # rspec 2
+rescue LoadError
+  require 'spec/autorun'
+end
 require 'fileutils'
 raise if ENV['RUBYOPT']
 
