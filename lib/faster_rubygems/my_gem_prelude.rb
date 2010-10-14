@@ -139,6 +139,10 @@ if defined?(Gem) then
 
     module QuickLoader
 
+      def self.remove
+        $stderr.puts 'warning--faster_rubygems doesnt quite yet implement remove yet, for 1.9.2--it will probably work without it though...'  if $VERBOSE || $DEBUG
+      end
+
       @loaded_full_rubygems_library = false
 
       def self.load_full_rubygems_library
